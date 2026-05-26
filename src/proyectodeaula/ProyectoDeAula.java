@@ -4,6 +4,8 @@
  */
 package proyectodeaula;
 
+import Util.Conexion;
+
 /**
  *
  * @author jos13
@@ -15,6 +17,7 @@ public class ProyectoDeAula {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Conexion.getConnection();
     }
     
 }
