@@ -4,15 +4,10 @@
  */
 package DAO;
 
-import Util.Conexion;
-import java.sql.Connection;
-
 /**
  *
- * @author Camil
+ * @author hp
  */
-public class BaseDao {
-      protected Connection getConnection() throws Exception {
-        return Conexion.getConnection();
-    }
+public class TransaccionDao {
+    
 }
