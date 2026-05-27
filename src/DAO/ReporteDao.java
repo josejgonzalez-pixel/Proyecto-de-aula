@@ -45,21 +45,11 @@ public class ReporteDao extends BaseDao {
 
             cn.close();
 
-            return new Response<>(
-                    true,
-                    "Reporte registrado",
-                    r,
-                    null
-            );
+            return new Response<>(true, "Reporte registrado", r, null);
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
 
@@ -89,30 +79,16 @@ public class ReporteDao extends BaseDao {
 
             if (filas > 0) {
 
-                return new Response<>(
-                        true,
-                        "Reporte actualizado", r,
-                        null
-                );
+                return new Response<>(true,"Reporte actualizado", r, null);
 
             } else {
 
-                return new Response<>(
-                        false,
-                        "No existe el reporte",
-                        null,
-                        null
-                );
+                return new Response<>(false, "No existe el reporte", null, null);
             }
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
 
@@ -135,31 +111,16 @@ public class ReporteDao extends BaseDao {
 
             if (filas > 0) {
 
-                return new Response<>(
-                        true,
-                        "Reporte eliminado",
-                        null,
-                        null
-                );
+                return new Response<>(true, "Reporte eliminado", null, null);
 
             } else {
 
-                return new Response<>(
-                        false,
-                        "No existe el reporte",
-                        null,
-                        null
-                );
+                return new Response<>(false, "No existe el reporte", null, null);
             }
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
 
@@ -186,20 +147,14 @@ public class ReporteDao extends BaseDao {
                         rs.getInt("idReporte"),
                         rs.getString("tipoReporte"),
                         rs.getDate("fechaGeneracion").toLocalDate(),
-                        rs.getInt("idUsuario")
-                );
+                        rs.getInt("idUsuario"));
             }
 
             cn.close();
 
             if (r != null) {
 
-                return new Response<>(
-                        true,
-                        "Reporte encontrado",
-                        r,
-                        null
-                );
+                return new Response<>(true, "Reporte encontrado", r, null);
 
             } else {
 
@@ -248,21 +203,11 @@ public class ReporteDao extends BaseDao {
 
             cn.close();
 
-            return new Response<>(
-                    true,
-                    "Lista de reportes obtenida",
-                    null,
-                    lista
-            );
+            return new Response<>(true, "Lista de reportes obtenida", null, lista);
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error: " + e.getMessage(), null,null);
         }
     }
 }

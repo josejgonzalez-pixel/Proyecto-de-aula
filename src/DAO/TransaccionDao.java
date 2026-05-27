@@ -46,21 +46,11 @@ public class TransaccionDao extends BaseDao {
 
             cn.close();
 
-            return new Response<>(
-                    true,
-                    "Transacción insertada correctamente",
-                    t,
-                    null
-            );
+            return new Response<>(true, "Transacción insertada correctamente", t, null);
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error al insertar transacción: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error al insertar transacción: " + e.getMessage(),null, null);
         }
     }
 
@@ -94,31 +84,16 @@ public class TransaccionDao extends BaseDao {
 
             if (filas > 0) {
 
-                return new Response<>(
-                        true,
-                        "Transacción actualizada correctamente",
-                        t,
-                        null
-                );
+                return new Response<>(true, "Transacción actualizada correctamente", t, null);
 
             } else {
 
-                return new Response<>(
-                        false,
-                        "Transacción no encontrada",
-                        null,
-                        null
-                );
+                return new Response<>(false, "Transacción no encontrada", null, null);
             }
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error al actualizar transacción: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error al actualizar transacción: " + e.getMessage(), null, null);
         }
     }
 
@@ -140,31 +115,16 @@ public class TransaccionDao extends BaseDao {
 
             if (filas > 0) {
 
-                return new Response<>(
-                        true,
-                        "Transacción eliminada correctamente",
-                        null,
-                        null
-                );
+                return new Response<>(true, "Transacción eliminada correctamente", null, null);
 
             } else {
 
-                return new Response<>(
-                        false,
-                        "Transacción no encontrada",
-                        null,
-                        null
-                );
+                return new Response<>(false, "Transacción no encontrada", null, null);
             }
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error al eliminar transacción: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error al eliminar transacción: " + e.getMessage(), null, null);
         }
     }
 
@@ -201,31 +161,16 @@ public class TransaccionDao extends BaseDao {
 
             if (t != null) {
 
-                return new Response<>(
-                        true,
-                        "Transacción encontrada",
-                        t,
-                        null
-                );
+                return new Response<>(true, "Transacción encontrada", t, null);
 
             } else {
 
-                return new Response<>(
-                        false,
-                        "Transacción no existe",
-                        null,
-                        null
-                );
+                return new Response<>(false,"Transacción no existe", null, null);
             }
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
 
@@ -261,21 +206,11 @@ public class TransaccionDao extends BaseDao {
 
             cn.close();
 
-            return new Response<>(
-                    true,
-                    "Lista de transacciones obtenida",
-                    null,
-                    lista
-            );
+            return new Response<>(true, "Lista de transacciones obtenida", null, lista);
 
         } catch (Exception e) {
 
-            return new Response<>(
-                    false,
-                    "Error: " + e.getMessage(),
-                    null,
-                    null
-            );
+            return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
 }
