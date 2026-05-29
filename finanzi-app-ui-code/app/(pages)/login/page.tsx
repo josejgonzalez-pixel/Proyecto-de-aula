@@ -195,28 +195,17 @@ export default function LoginPage() {
             <div className="flex-grow border-t border-muted" />
           </div>
 
-          {/* Botones de Auth de Terceros (Google / Microsoft) */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Botones de Auth de Terceros (Google) - Ahora centrado */}
+          <div className="flex justify-center w-full">
             {/* Botón Google */}
-            <button className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border bg-card text-xs font-semibold text-foreground hover:bg-muted transition-colors">
+            <button className="flex items-center justify-center gap-3 py-2.5 px-6 w-full sm:w-auto min-w-[150px] rounded-lg border bg-card text-xs font-semibold text-foreground hover:bg-muted transition-colors">
               <svg className="h-4 w-4" viewBox="0 0 24 24">
-                <path fill="#EA4335" d="M12 5.04c1.64 0 3.12.56 4.28 1.67l3.2-3.2C17.52 1.58 14.96 1 12 1 7.35 1 3.4 3.65 1.5 7.5l3.6 2.8C6.01 7.14 8.74 5.04 12 5.04z"/>
-                <path fill="#4285F4" d="M23.5 12.25c0-.82-.07-1.6-.2-2.35H12v4.45h6.45c-.28 1.47-1.11 2.71-2.36 3.55l3.6 2.8c2.1-1.94 3.31-4.8 3.31-8.45z"/>
-                <path fill="#FBBC05" d="M5.1 14.7c-.23-.68-.35-1.4-.35-2.2s.12-1.52.35-2.2L1.5 7.5C.54 9.4 0 11.6 0 12s.54 2.6 1.5 4.5l3.6-2.8z"/>
-                <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.6-2.8c-1.1.74-2.52 1.18-4.36 1.18-3.26 0-5.99-2.1-6.98-5.26l-3.6 2.8C3.4 20.35 7.35 23 12 23z"/>
+                <path fill="#EA4335" d="M12 5.04c1.64 0 3.12.56 4.28 1.67l3.2-3.2C17.52 1.58 14.96 1 12 1 7.35 1 3.4 3.65 1.5 7.5l3.6 2.8C6.01 7.14 8.74 5.04 12 5.04z" />
+                <path fill="#4285F4" d="M23.5 12.25c0-.82-.07-1.6-.2-2.35H12v4.45h6.45c-.28 1.47-1.11 2.71-2.36 3.55l3.6 2.8c2.1-1.94 3.31-4.8 3.31-8.45z" />
+                <path fill="#FBBC05" d="M5.1 14.7c-.23-.68-.35-1.4-.35-2.2s.12-1.52.35-2.2L1.5 7.5C.54 9.4 0 11.6 0 12s.54 2.6 1.5 4.5l3.6-2.8z" />
+                <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.6-2.8c-1.1.74-2.52 1.18-4.36 1.18-3.26 0-5.99-2.1-6.98-5.26l-3.6 2.8C3.4 20.35 7.35 23 12 23z" />
               </svg>
               Google
-            </button>
-
-            {/* Botón Microsoft */}
-            <button className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border bg-card text-xs font-semibold text-foreground hover:bg-muted transition-colors">
-              <svg className="h-4 w-4" viewBox="0 0 23 23">
-                <path fill="#F25022" d="M0 0h11v11H0z"/>
-                <path fill="#7FBA00" d="M12 0h11v11H12z"/>
-                <path fill="#00A4EF" d="M0 12h11v11H0z"/>
-                <path fill="#FFB900" d="M12 12h11v11H12z"/>
-              </svg>
-              Microsoft
             </button>
           </div>
 
