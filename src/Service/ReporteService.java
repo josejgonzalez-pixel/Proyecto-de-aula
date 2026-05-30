@@ -5,7 +5,6 @@
 package Service;
 
 import DAO.ReporteDao;
-import DAO.TransaccionDao;
 import DAO.Response;
 import Model.Reporte;
 import Model.Transaccion;
@@ -15,69 +14,44 @@ import Model.Transaccion;
  */
 public class ReporteService {
 
-    private ReporteDao reporteDao;
-    private TransaccionDao transaccionDao;
+    private ReporteDao repo;
 
     public ReporteService() {
-        reporteDao = new ReporteDao();
-        transaccionDao = new TransaccionDao();
+        repo = new ReporteDao();
     }
 
     // INSERTAR
-    public Response<Reporte> insertar(Reporte reporte) {
-        return reporteDao.insertar(reporte);
+    public Response<Reporte> insertar(Reporte r) {
+        return repo.insertar(r);
     }
 
     // ACTUALIZAR
-    public Response<Reporte> actualizar(Reporte reporte) {
-        return reporteDao.actualizar(reporte);
+    public Response<Reporte> actualizar(Reporte r) {
+        return repo.actualizar(r);
     }
 
     // ELIMINAR
     public Response<Reporte> eliminar(int id) {
-        return reporteDao.eliminar(id);
+        return repo.eliminar(id);
     }
 
-    // BUSCAR POR ID
+    // OBTENER POR ID
     public Response<Reporte> obtenerPorId(int id) {
-        return reporteDao.obtenerPorId(id);
+        return repo.obtenerPorId(id);
     }
 
-    // LISTAR TODOS
+    // OBTENER TODOS
     public Response<Reporte> obtenerTodos() {
-        return reporteDao.obtenerTodos();
+        return repo.obtenerTodos();
     }
 
-    /**
-     * Obtiene las transacciones para generar graficos.
-     * Puedes filtrar posteriormente por ingresos o gastos.
-     */
+    // OBTENER DATOS PARA GRAFICO
     public Response<Transaccion> obtenerDatosParaGrafico(String tipo) {
-
-        Response<Transaccion> respuesta =
-                transaccionDao.obtenerTodos();
-
-        return respuesta;
+        return repo.obtenerDatosParaGrafico(tipo);
     }
 
-    /**
-     * Calcula el balance financiero total.
-     */
+    // OBTENER RESUMEN FINANCIERO
     public double obtenerResumenFinanciero() {
-
-        double total = 0;
-
-        Response<Transaccion> respuesta =
-                transaccionDao.obtenerTodos();
-
-        if (respuesta.getLista() != null) {
-
-            for (Transaccion t : respuesta.getLista()) {
-
-                total += t.getMonto();
-            }
-        }
-
-        return total;
+        return repo.obtenerResumenFinanciero();
     }
 }
