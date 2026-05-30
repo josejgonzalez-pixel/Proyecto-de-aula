@@ -4,10 +4,56 @@
  */
 package Service;
 
+import DAO.AlertaDao;
+import DAO.Response;
+import Model.Alerta;
 /**
  *
  * @author hp
  */
 public class AlertaService {
-    
+
+    private AlertaDao repo;
+
+    public AlertaService() {
+        repo = new AlertaDao();
+    }
+
+    // INSERTAR
+    public Response<Alerta> insertar(Alerta alerta) {
+        return repo.insertar(alerta);
+    }
+
+    // ACTUALIZAR
+    public Response<Alerta> actualizar(Alerta alerta) {
+        return repo.actualizar(alerta);
+    }
+
+    // ELIMINAR
+    public Response<Alerta> eliminar(String mensaje) {
+        return repo.eliminar(mensaje);
+    }
+
+    // OBTENER POR MENSAJE
+    public Response<Alerta> obtenerPorMensaje(String mensaje) {
+        return repo.obtenerPorMensaje(mensaje);
+    }
+
+    // OBTENER TODAS
+    public Response<Alerta> obtenerTodos() {
+        return repo.obtenerTodos();
+    }
+
+    // ENVIAR ALERTA
+    public void enviarAlerta(String mensaje) {
+
+        Response<Alerta> respuesta =
+                repo.obtenerPorMensaje(mensaje);
+
+        if (respuesta.isSuccess()
+                && respuesta.getObjeto() != null) {
+
+            respuesta.getObjeto().enviarAlerta();
+        }
+    }
 }
