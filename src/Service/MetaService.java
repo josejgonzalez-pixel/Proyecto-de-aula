@@ -58,25 +58,4 @@ public class MetaService {
 
         return 0;
     }
-
-    // ACTUALIZAR MONTO
-    public Response<Meta> actualizarMonto(int idMeta, double nuevoMonto) {
-
-        Response<Meta> respuesta = repo.obtenerPorId(idMeta);
-
-        if (!respuesta.isSuccess() || respuesta.getObjeto() == null) {
-
-            return new Response<>(false,
-                    "No se encontro la meta", null, null);
-        }
-
-        Meta meta = respuesta.getObjeto();
-
-        // Suma el nuevo monto al monto actual
-        meta.setMontoActual(
-                meta.getMontoActual() + nuevoMonto
-        );
-
-        return repo.actualizar(meta);
-    }
 }
