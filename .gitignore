@@ -1,1 +1,4 @@
-/build/
+# Ignorar configuraciones privadas de NetBeans 
+**/nbproject/private/
+**/build/
+**/dist/
