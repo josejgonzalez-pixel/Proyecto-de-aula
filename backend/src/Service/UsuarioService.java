@@ -48,7 +48,7 @@ public class UsuarioService {
     // VALIDAR LOGIN
     public boolean validarLogin(String correo, String contrasena) {
 
-        List<Usuario> usuarios = repo.obtenerTodos().getLista();
+        List<Usuario> usuarios = (List<Usuario>) repo.obtenerTodos().getLista();
 
         if (usuarios == null) {
             return false;
@@ -69,7 +69,7 @@ public class UsuarioService {
     // VALIDAR SI EL CORREO YA EXISTE
     public boolean existeCorreo(String correo) {
 
-        List<Usuario> usuarios = repo.obtenerTodos().getLista();
+        List<Usuario> usuarios = (List<Usuario>) repo.obtenerTodos().getLista();
 
         if (usuarios == null) {
             return false;

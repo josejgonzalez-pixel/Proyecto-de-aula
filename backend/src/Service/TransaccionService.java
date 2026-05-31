@@ -20,7 +20,7 @@ public class TransaccionService {
     }
 
     // INSERTAR
-    public Response<Transaccion> insertar(Transaccion t) {
+    public Response<Transaccion> insertar(Transaccion t) throws Exception {
         return repo.insertar(t);
     }
 
@@ -35,17 +35,17 @@ public class TransaccionService {
     }
 
     // BUSCAR POR ID
-    public Response<Transaccion> obtenerPorId(int id) {
+    public Response<Transaccion> obtenerPorId(int id) throws Exception {
         return repo.obtenerPorId(id);
     }
 
     // LISTAR TODAS
-    public Response<Transaccion> obtenerTodos() {
+    public Response<Transaccion> obtenerTodos() throws Exception {
         return repo.obtenerTodos();
     }
 
     // OBTENER BALANCE TOTAL
-    public double obtenerBalanceTotal() {
+    public double obtenerBalanceTotal() throws Exception {
 
         double total = 0;
 
@@ -53,7 +53,7 @@ public class TransaccionService {
 
         if (respuesta.getLista() != null) {
 
-            for (Transaccion t : respuesta.getLista()) {
+            for (var t : respuesta.getLista()) {
 
                 total += t.getMonto();
             }

@@ -21,27 +21,27 @@ public class ReporteService {
     }
 
     // INSERTAR
-    public Response<Reporte> insertar(Reporte r) {
+    public Response<Reporte> insertar(Reporte r) throws Exception {
         return repo.insertar(r);
     }
 
     // ACTUALIZAR
-    public Response<Reporte> actualizar(Reporte r) {
+    public Response<Reporte> actualizar(Reporte r) throws Exception {
         return repo.actualizar(r);
     }
 
     // ELIMINAR
-    public Response<Reporte> eliminar(int id) {
+    public Response<Reporte> eliminar(int id) throws Exception {
         return repo.eliminar(id);
     }
 
     // OBTENER POR ID
-    public Response<Reporte> obtenerPorId(int id) {
+    public Response<Reporte> obtenerPorId(int id) throws Exception {
         return repo.obtenerPorId(id);
     }
 
     // OBTENER TODOS
-    public Response<Reporte> obtenerTodos() {
+    public Response<Reporte> obtenerTodos() throws Exception {
         return repo.obtenerTodos();
     }
 

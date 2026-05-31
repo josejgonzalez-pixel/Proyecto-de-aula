@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,34 +22,33 @@ import java.util.List;
 public class TransaccionDao extends BaseDao {
 
     // INSERTAR TRANSACCION
-    public Response<Transaccion> insertar(Transaccion t) {
+    public Response<Transaccion> insertar(Transaccion t) throws Exception {
 
         try {
 
             String sql = "INSERT INTO transaccion " + "(monto, fecha, descripcion, idUsuario, idCategoria) "
                     + "VALUES (?, ?, ?, ?, ?)";
 
-            Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            ps.setDouble(1, t.getMonto());
-            ps.setDate(2, Date.valueOf(t.getFecha()));
-            ps.setString(3, t.getDescripcion());
-            ps.setInt(4, t.getIdUsuario());
-            ps.setInt(5, t.getIdCategoria());
-
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                t.setIdTransaccion(rs.getInt(1));
+            try (java.sql.Connection cn = getConnection()) {
+                PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                
+                ps.setDouble(1, t.getMonto());
+                ps.setDate(2, Date.valueOf(t.getFecha()));
+                ps.setString(3, t.getDescripcion());
+                ps.setInt(4, t.getIdUsuario());
+                ps.setInt(5, t.getIdCategoria());
+                
+                ps.executeUpdate();
+                
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    t.setIdTransaccion(rs.getInt(1));
+                }
             }
-
-            cn.close();
 
             return new Response<>(true, "Transacción insertada correctamente", t, null);
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             return new Response<>(false, "Error al insertar transacción: " + e.getMessage(),null, null);
         }
@@ -129,35 +129,31 @@ public class TransaccionDao extends BaseDao {
     }
 
     // OBTENER TRANSACCION POR ID
-    public Response<Transaccion> obtenerPorId(int id) {
+    public Response<Transaccion> obtenerPorId(int id) throws Exception {
 
         try {
 
             String sql = "SELECT * FROM transaccion WHERE idTransaccion=?";
 
-            Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement(sql);
-
-            ps.setInt(1, id);
-
-            ResultSet rs = ps.executeQuery();
-
-            Transaccion t = null;
-
-            if (rs.next()) {
-
-                t = new Transaccion(
-                        rs.getInt("idTransaccion"),
-                        rs.getDouble("monto"),
-                        rs.getDate("fecha").toLocalDate(),
-                        rs.getString("descripcion"),
-                        rs.getInt("idUsuario"),
-                        rs.getInt("idCategoria")
-                ) {
-                };
+            Transaccion t;
+            try (java.sql.Connection cn = getConnection()) {
+                PreparedStatement ps = cn.prepareStatement(sql);
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                t = null;
+                if (rs.next()) {
+                    
+                    t = new Transaccion(
+                            rs.getInt("idTransaccion"),
+                            rs.getDouble("monto"),
+                            rs.getDate("fecha").toLocalDate(),
+                            rs.getString("descripcion"),
+                            rs.getInt("idUsuario"),
+                            rs.getInt("idCategoria")
+                    ) {
+                    };
+                }
             }
-
-            cn.close();
 
             if (t != null) {
 
@@ -168,14 +164,14 @@ public class TransaccionDao extends BaseDao {
                 return new Response<>(false,"Transacción no existe", null, null);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
 
     // OBTENER TODAS LAS TRANSACCIONES
-    public Response<Transaccion> obtenerTodos() {
+    public Response<Transaccion> obtenerTodos() throws Exception {
 
         try {
 
@@ -183,32 +179,30 @@ public class TransaccionDao extends BaseDao {
 
             String sql = "SELECT * FROM transaccion";
 
-            Connection cn = getConnection();
-
-            Statement st = cn.createStatement();
-
-            ResultSet rs = st.executeQuery(sql);
-
-            while (rs.next()) {
-
-                Transaccion t = new Transaccion(
-                        rs.getInt("idTransaccion"),
-                        rs.getDouble("monto"),
-                        rs.getDate("fecha").toLocalDate(),
-                        rs.getString("descripcion"),
-                        rs.getInt("idUsuario"),
-                        rs.getInt("idCategoria")
-                ) {
-                };
-
-                lista.add(t);
+            try (var cn = getConnection()) {
+                Statement st = cn.createStatement();
+                
+                ResultSet rs = st.executeQuery(sql);
+                
+                while (rs.next()) {
+                    
+                    Transaccion t = new Transaccion(
+                            rs.getInt("idTransaccion"),
+                            rs.getDouble("monto"),
+                            rs.getDate("fecha").toLocalDate(),
+                            rs.getString("descripcion"),
+                            rs.getInt("idUsuario"),
+                            rs.getInt("idCategoria")
+                    ) {
+                    };
+                    
+                    lista.add(t);
+                }
             }
-
-            cn.close();
 
             return new Response<>(true, "Lista de transacciones obtenida", null, lista);
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
