@@ -34,4 +34,52 @@ public class Meta {
     public double calcularProgreso() {
         return (montoActual / montoMeta) * 100;
     }
+
+    public int getIdMeta() {
+        return idMeta;
+    }
+
+    public void setIdMeta(int idMeta) {
+        this.idMeta = idMeta;
+    }
+
+    public String getNombreMeta() {
+        return nombreMeta;
+    }
+
+    public void setNombreMeta(String nombreMeta) {
+        this.nombreMeta = nombreMeta;
+    }
+
+    public double getMontoMeta() {
+        return montoMeta;
+    }
+
+    public void setMontoMeta(double montoMeta) {
+        this.montoMeta = montoMeta;
+    }
+
+    public double getMontoActual() {
+        return montoActual;
+    }
+
+    public void setMontoActual(double montoActual) {
+        this.montoActual = montoActual;
+    }
+
+    public LocalDate getFechaLimite() {
+        return fechaLimite;
+    }
+
+    public void setFechaLimite(LocalDate fechaLimite) {
+        this.fechaLimite = fechaLimite;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 }

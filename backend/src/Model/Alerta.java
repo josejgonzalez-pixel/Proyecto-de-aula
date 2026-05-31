@@ -26,4 +26,22 @@ public class Alerta {
     public void enviarAlerta() {
         System.out.println(mensaje);
     }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public LocalDate getFechaAlerta() {
+        return fechaAlerta;
+    }
+
+    public void setFechaAlerta(LocalDate fechaAlerta) {
+        this.fechaAlerta = fechaAlerta;
+    }
+    
+    
 }

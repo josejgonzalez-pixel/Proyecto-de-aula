@@ -5,7 +5,7 @@
 package Service;
 
 import DAO.IngresoDao;
-import DAO.Response;
+import Util.Response;
 import Model.Ingreso;
 /**
  *

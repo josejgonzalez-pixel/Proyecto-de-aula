@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import Util.Response;
 import Model.Ingreso;
 import java.sql.Connection;
 import java.sql.Date;

@@ -5,7 +5,7 @@
 package Service;
 
 import DAO.ReporteDao;
-import DAO.Response;
+import Util.Response;
 import Model.Reporte;
 import Model.Transaccion;
 /**

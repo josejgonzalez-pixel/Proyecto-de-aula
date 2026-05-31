@@ -5,7 +5,7 @@
 package Service;
 
 import DAO.AlertaDao;
-import DAO.Response;
+import Util.Response;
 import Model.Alerta;
 /**
  *

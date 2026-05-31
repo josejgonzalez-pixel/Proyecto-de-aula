@@ -32,4 +32,44 @@ public class Presupuesto {
     public boolean verificarLimite() {
         return montoActual <= 0;
     }
+
+    public int getIdPresupuesto() {
+        return idPresupuesto;
+    }
+
+    public void setIdPresupuesto(int idPresupuesto) {
+        this.idPresupuesto = idPresupuesto;
+    }
+
+    public double getMontoInicial() {
+        return montoInicial;
+    }
+
+    public void setMontoInicial(double montoInicial) {
+        this.montoInicial = montoInicial;
+    }
+
+    public double getMontoActual() {
+        return montoActual;
+    }
+
+    public void setMontoActual(double montoActual) {
+        this.montoActual = montoActual;
+    }
+
+    public LocalDate getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDate fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 }
