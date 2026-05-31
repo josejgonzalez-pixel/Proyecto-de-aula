@@ -22,21 +22,20 @@ public class UsuarioDao extends BaseDao{
         try {
             String sql = "INSERT INTO usuario (nombre, correo, contrasena) VALUES (?, ?, ?)";
 
-            Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            ps.setString(1, u.getNombre());
-            ps.setString(2, u.getCorreo());
-            ps.setString(3, u.getContrasena());
-
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                u.setIdUsuario(rs.getInt(1));
+            try (Connection cn = getConnection()) {
+                PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                
+                ps.setString(1, u.getNombre());
+                ps.setString(2, u.getCorreo());
+                ps.setString(3, u.getContrasena());
+                
+                ps.executeUpdate();
+                
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    u.setIdUsuario(rs.getInt(1));
+                }
             }
-
-            cn.close();
 
             return new Response<>(true, "Usuario insertado correctamente", u, null);
 
