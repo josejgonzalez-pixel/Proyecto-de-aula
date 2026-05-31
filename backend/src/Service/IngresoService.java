@@ -20,32 +20,32 @@ public class IngresoService {
     }
 
     // INSERTAR
-    public Response<Ingreso> insertar(Ingreso ingreso) {
+    public Response<Ingreso> insertar(Ingreso ingreso) throws Exception {
         return repo.insertar(ingreso);
     }
 
     // ACTUALIZAR
-    public Response<Ingreso> actualizar(Ingreso ingreso) {
+    public Response<Ingreso> actualizar(Ingreso ingreso) throws Exception {
         return repo.actualizar(ingreso);
     }
 
     // ELIMINAR
-    public Response<Ingreso> eliminar(int id) {
+    public Response<Ingreso> eliminar(int id) throws Exception {
         return repo.eliminar(id);
     }
 
     // OBTENER POR ID
-    public Response<Ingreso> obtenerPorId(int id) {
+    public Response<Ingreso> obtenerPorId(int id) throws Exception {
         return repo.obtenerPorId(id);
     }
 
     // OBTENER TODOS
-    public Response<Ingreso> obtenerTodos() {
+    public Response<Ingreso> obtenerTodos() throws Exception {
         return repo.obtenerTodos();
     }
 
     // CALCULAR TOTAL DE INGRESOS
-    public double calcularTotalIngresos() {
+    public double calcularTotalIngresos() throws Exception {
 
         double total = 0;
 
