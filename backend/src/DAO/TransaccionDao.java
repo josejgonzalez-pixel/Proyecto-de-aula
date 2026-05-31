@@ -4,11 +4,8 @@
  */
 package DAO;
 
-<<<<<<< HEAD
 import Util.Response;
 import com.sun.jdi.connect.spi.Connection;
-=======
->>>>>>> b9ec84e0908eec3b1bc51cf476de48725abd9b3d
 import Model.Transaccion;
 import java.sql.Connection;
 import java.sql.Date;
