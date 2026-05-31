@@ -13,6 +13,6 @@ import java.sql.Connection;
  */
 public class BaseDao {
       protected Connection getConnection() throws Exception {
-        return Conexion.getConnection();
+        return Conexion.getConnection(); 
     }
 }
