@@ -25,12 +25,12 @@ public class TransaccionService {
     }
 
     // ACTUALIZAR
-    public Response<Transaccion> actualizar(Transaccion t) {
+    public Response<Transaccion> actualizar(Transaccion t) throws Exception {
         return repo.actualizar(t);
     }
 
     // ELIMINAR
-    public Response<Transaccion> eliminar(int id) {
+    public Response<Transaccion> eliminar(int id) throws Exception {
         return repo.eliminar(id);
     }
 
