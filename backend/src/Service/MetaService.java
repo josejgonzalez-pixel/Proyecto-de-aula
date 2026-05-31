@@ -20,38 +20,38 @@ public class MetaService {
     }
 
     // INSERTAR
-    public Response<Meta> insertar(Meta meta) {
+    public Response<Meta> insertar(Meta meta) throws Exception {
         return repo.insertar(meta);
     }
 
     // ACTUALIZAR
-    public Response<Meta> actualizar(Meta meta) {
+    public Response<Meta> actualizar(Meta meta) throws Exception {
         return repo.actualizar(meta);
     }
 
     // ELIMINAR
-    public Response<Meta> eliminar(int id) {
+    public Response<Meta> eliminar(int id) throws Exception {
         return repo.eliminar(id);
     }
 
     // OBTENER POR ID
-    public Response<Meta> obtenerPorId(int id) {
+    public Response<Meta> obtenerPorId(int id) throws Exception {
         return repo.obtenerPorId(id);
     }
 
     // OBTENER TODAS
-    public Response<Meta> obtenerTodos() {
+    public Response<Meta> obtenerTodos() throws Exception {
         return repo.obtenerTodos();
     }
 
     // CALCULAR PROGRESO
-    public double calcularProgreso(int idMeta) {
+    public double calcularProgreso(int idMeta) throws Exception {
 
         Response<Meta> respuesta = repo.obtenerPorId(idMeta);
 
         if (respuesta.isSuccess() && respuesta.getObjeto() != null) {
 
-            Meta meta = respuesta.getObjeto();
+            Meta meta = (Meta) respuesta.getObjeto();
 
             return meta.calcularProgreso();
         }

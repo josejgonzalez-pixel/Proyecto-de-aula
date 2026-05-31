@@ -9,6 +9,7 @@ import java.util.List;
 /**
  *
  * @author Camil
+ * @param <T>
  */
 public class Response<T> {
     
@@ -25,7 +26,7 @@ public class Response<T> {
         this.entidad = entidad;
         this.lista = lista;
     }
-
+    
     public boolean isEstado() {
         return estado;
     }

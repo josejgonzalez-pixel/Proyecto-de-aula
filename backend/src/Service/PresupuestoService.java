@@ -21,32 +21,32 @@ public class PresupuestoService {
     }
 
     // INSERTAR
-    public Response<Presupuesto> insertar(Presupuesto p) {
+    public Response<Presupuesto> insertar(Presupuesto p) throws Exception {
         return repo.insertar(p);
     }
 
     // ACTUALIZAR
-    public Response<Presupuesto> actualizar(Presupuesto p) {
+    public Response<Presupuesto> actualizar(Presupuesto p) throws Exception {
         return repo.actualizar(p);
     }
 
     // ELIMINAR
-    public Response<Presupuesto> eliminar(int id) {
+    public Response<Presupuesto> eliminar(int id) throws Exception {
         return repo.eliminar(id);
     }
 
     // OBTENER POR ID
-    public Response<Presupuesto> obtenerPorId(int id) {
+    public Response<Presupuesto> obtenerPorId(int id) throws Exception {
         return repo.obtenerPorId(id);
     }
 
     // OBTENER TODOS
-    public Response<Presupuesto> obtenerTodos() {
+    public Response<Presupuesto> obtenerTodos() throws Exception {
         return repo.obtenerTodos();
     }
 
     // ACTUALIZAR MONTO ACTUAL
-    public Response<Presupuesto> actualizarMontoActual(int idPresupuesto, double nuevoMonto) {
+    public Response<Presupuesto> actualizarMontoActual(int idPresupuesto, double nuevoMonto) throws Exception {
 
         Response<Presupuesto> respuesta = repo.obtenerPorId(idPresupuesto);
 
@@ -60,7 +60,7 @@ public class PresupuestoService {
             );
         }
 
-        Presupuesto presupuesto = respuesta.getObjeto();
+        Presupuesto presupuesto = (Presupuesto) respuesta.getObjeto();
 
         presupuesto.setMontoActual(nuevoMonto);
 
@@ -68,7 +68,7 @@ public class PresupuestoService {
     }
 
     // VERIFICAR LIMITE
-    public boolean verificarLimite(int idPresupuesto) {
+    public boolean verificarLimite(int idPresupuesto) throws Exception {
 
         Response<Presupuesto> respuesta = repo.obtenerPorId(idPresupuesto);
 
@@ -76,7 +76,7 @@ public class PresupuestoService {
             return false;
         }
 
-        Presupuesto presupuesto = respuesta.getObjeto();
+        Presupuesto presupuesto = (Presupuesto) respuesta.getObjeto();
 
         return presupuesto.verificarLimite();
     }

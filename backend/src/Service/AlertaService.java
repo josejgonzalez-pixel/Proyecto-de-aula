@@ -20,32 +20,32 @@ public class AlertaService {
     }
 
     // INSERTAR
-    public Response<Alerta> insertar(Alerta alerta) {
+    public Response<Alerta> insertar(Alerta alerta) throws Exception {
         return repo.insertar(alerta);
     }
 
     // ACTUALIZAR
-    public Response<Alerta> actualizar(Alerta alerta) {
+    public Response<Alerta> actualizar(Alerta alerta) throws Exception {
         return repo.actualizar(alerta);
     }
 
     // ELIMINAR
-    public Response<Alerta> eliminar(String mensaje) {
+    public Response<Alerta> eliminar(String mensaje) throws Exception {
         return repo.eliminar(mensaje);
     }
 
     // OBTENER POR MENSAJE
-    public Response<Alerta> obtenerPorMensaje(String mensaje) {
+    public Response<Alerta> obtenerPorMensaje(String mensaje) throws Exception {
         return repo.obtenerPorMensaje(mensaje);
     }
 
     // OBTENER TODAS
-    public Response<Alerta> obtenerTodos() {
+    public Response<Alerta> obtenerTodos() throws Exception {
         return repo.obtenerTodos();
     }
 
     // ENVIAR ALERTA
-    public void enviarAlerta(String mensaje) {
+    public void enviarAlerta(String mensaje) throws Exception {
 
         Response<Alerta> respuesta =
                 repo.obtenerPorMensaje(mensaje);

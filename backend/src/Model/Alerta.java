@@ -42,6 +42,4 @@ public class Alerta {
     public void setFechaAlerta(LocalDate fechaAlerta) {
         this.fechaAlerta = fechaAlerta;
     }
-    
-    
 }

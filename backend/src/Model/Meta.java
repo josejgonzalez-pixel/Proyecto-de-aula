@@ -10,8 +10,7 @@ import java.time.LocalDate;
  *
  * @author Camil
  */
-public class Meta {
-    
+public class Meta {  
     private int idMeta;
     private String nombreMeta;
     private double montoMeta;
