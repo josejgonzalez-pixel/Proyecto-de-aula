@@ -4,8 +4,8 @@
  */
 package DAO;
 
+import Util.Conexion;
 import java.sql.Connection;
-import util.Conexion;
 
 /**
  *
