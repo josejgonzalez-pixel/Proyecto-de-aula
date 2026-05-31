@@ -20,32 +20,32 @@ public class GastoService {
     }
 
     // INSERTAR
-    public Response<Gasto> insertar(Gasto gasto) {
+    public Response<Gasto> insertar(Gasto gasto) throws Exception {
         return repo.insertar(gasto);
     }
 
     // ACTUALIZAR
-    public Response<Gasto> actualizar(Gasto gasto) {
+    public Response<Gasto> actualizar(Gasto gasto) throws Exception {
         return repo.actualizar(gasto);
     }
 
     // ELIMINAR
-    public Response<Gasto> eliminar(int id) {
+    public Response<Gasto> eliminar(int id) throws Exception {
         return repo.eliminar(id);
     }
 
     // OBTENER POR ID
-    public Response<Gasto> obtenerPorId(int id) {
+    public Response<Gasto> obtenerPorId(int id) throws Exception {
         return repo.obtenerPorId(id);
     }
 
     // OBTENER TODOS
-    public Response<Gasto> obtenerTodos() {
+    public Response<Gasto> obtenerTodos() throws Exception {
         return repo.obtenerTodos();
     }
 
     // CALCULAR TOTAL DE GASTOS
-    public double calcularTotalGastos() {
+    public double calcularTotalGastos() throws Exception {
 
         double total = 0;
 
