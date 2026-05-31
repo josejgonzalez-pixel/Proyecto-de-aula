@@ -9,6 +9,7 @@ import java.util.List;
 /**
  *
  * @author Camil
+ * @param <T>
  */
 public class Response<T> {
     
@@ -24,5 +25,13 @@ public class Response<T> {
         this.mensaje = mensaje;
         this.entidad = entidad;
         this.lista = lista;
+    }
+
+    public boolean isSuccess() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Object getObjeto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
