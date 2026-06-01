@@ -50,10 +50,10 @@ public class AlertaService {
         Response<Alerta> respuesta =
                 repo.obtenerPorMensaje(mensaje);
 
-        if (respuesta.isSuccess()
-                && respuesta.getObjeto() != null) {
+        if (respuesta.isEstado()
+            && respuesta.getEntidad() != null) {
 
-            respuesta.getObjeto().enviarAlerta();
-        }
+            respuesta.getEntidad().enviarAlerta();
+        } 
     }
 }
