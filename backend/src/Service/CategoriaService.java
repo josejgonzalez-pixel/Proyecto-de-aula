@@ -49,7 +49,7 @@ public class CategoriaService {
 
         Response<Categoria> respuesta = repo.obtenerPorId(idCategoria);
 
-        return respuesta.isSuccess()
-                && respuesta.getObjeto() != null;
+        return respuesta.isEstado()
+        && respuesta.getEntidad() != null;
     }
 }
