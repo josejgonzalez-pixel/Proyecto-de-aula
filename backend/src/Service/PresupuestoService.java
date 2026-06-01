@@ -50,7 +50,7 @@ public class PresupuestoService {
 
         Response<Presupuesto> respuesta = repo.obtenerPorId(idPresupuesto);
 
-        if (!respuesta.isSuccess() || respuesta.getObjeto() == null) {
+        if (!respuesta.isEstado() || respuesta.getEntidad() == null) {
 
             return new Response<>(
                     false,
@@ -60,7 +60,7 @@ public class PresupuestoService {
             );
         }
 
-        Presupuesto presupuesto = (Presupuesto) respuesta.getObjeto();
+        Presupuesto presupuesto = respuesta.getEntidad();
 
         presupuesto.setMontoActual(nuevoMonto);
 
@@ -72,11 +72,11 @@ public class PresupuestoService {
 
         Response<Presupuesto> respuesta = repo.obtenerPorId(idPresupuesto);
 
-        if (!respuesta.isSuccess() || respuesta.getObjeto() == null) {
+        if (!respuesta.isEstado() || respuesta.getEntidad() == null) {
             return false;
         }
 
-        Presupuesto presupuesto = (Presupuesto) respuesta.getObjeto();
+        Presupuesto presupuesto = respuesta.getEntidad();
 
         return presupuesto.verificarLimite();
     }
