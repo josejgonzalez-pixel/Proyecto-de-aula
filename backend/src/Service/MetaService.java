@@ -49,9 +49,9 @@ public class MetaService {
 
         Response<Meta> respuesta = repo.obtenerPorId(idMeta);
 
-        if (respuesta.isSuccess() && respuesta.getObjeto() != null) {
+        if (respuesta.isEstado() && respuesta.getEntidad() != null) {
 
-            Meta meta = (Meta) respuesta.getObjeto();
+            Meta meta = respuesta.getEntidad();
 
             return meta.calcularProgreso();
         }
