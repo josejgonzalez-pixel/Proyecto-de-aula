@@ -24,152 +24,183 @@ public class AlertaDao extends BaseDao {
     // INSERTAR
     public Response<Alerta> insertar(Alerta a) throws Exception {
 
-        try {
+    try {
 
-            try (Connection cn = getConnection()) {
-                String sql = "INSERT INTO alerta " + "(mensaje, fechaAlerta) "
-                        + "VALUES (?, ?)";
+        try (Connection cn = getConnection()) {
 
-                PreparedStatement ps = cn.prepareStatement(sql);
+            String sql = "INSERT INTO alerta (mensaje, fechaAlerta, idUsuario) VALUES (?, ?, ?)";
 
-                ps.setString(1, a.getMensaje());
-                ps.setDate(2, Date.valueOf(a.getFechaAlerta()));
+            PreparedStatement ps = cn.prepareStatement(
+                    sql,
+                    Statement.RETURN_GENERATED_KEYS
+            );
 
-                ps.executeUpdate();
+            ps.setString(1, a.getMensaje());
+            ps.setDate(2, Date.valueOf(a.getFechaAlerta()));
+            ps.setInt(3, a.getIdUsuario());
+
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                a.setIdAlerta(rs.getInt(1));
             }
-
-            return new Response<>(true, "Alerta registrada", a, null);
-
-        } catch (SQLException e) {
-
-            return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
+
+        return new Response<>(true, "Alerta registrada", a, null);
+
+    } catch (SQLException e) {
+
+        return new Response<>(false, "Error: " + e.getMessage(), null, null);
     }
+}
 
     // ACTUALIZAR
     public Response<Alerta> actualizar(Alerta a) throws Exception {
 
-        try {
+    try {
 
-            int filas;
-            try (Connection cn = getConnection()) {
-                String sql = "UPDATE alerta SET "
-                        + "mensaje=?, "
-                        + "fechaAlerta=? "
-                        + "WHERE mensaje=?";
-                PreparedStatement ps = cn.prepareStatement(sql);
-                ps.setString(1, a.getMensaje());
-                ps.setDate(2, Date.valueOf(a.getFechaAlerta()));
-                ps.setString(3, a.getMensaje());
-                filas = ps.executeUpdate();
-            }
+        int filas;
 
-            if (filas > 0) {
+        try (Connection cn = getConnection()) {
 
-                return new Response<>(true, "Alerta actualizada", a, null);
+            String sql = "UPDATE alerta SET mensaje=?, fechaAlerta=?, idUsuario=? WHERE idAlerta=?";
 
-            } else {
+            PreparedStatement ps = cn.prepareStatement(sql);
 
-                return new Response<>(false, "No existe la alerta", null, null);
-            }
+            ps.setString(1, a.getMensaje());
+            ps.setDate(2, Date.valueOf(a.getFechaAlerta()));
+            ps.setInt(3, a.getIdUsuario());
+            ps.setInt(4, a.getIdAlerta());
 
-        } catch (SQLException e) {
-
-            return new Response<>(false, "Error: " + e.getMessage(), null, null);
+            filas = ps.executeUpdate();
         }
+
+        if (filas > 0) {
+
+            return new Response<>(true, "Alerta actualizada", a, null);
+
+        } else {
+
+            return new Response<>(false, "No existe la alerta", null, null);
+        }
+
+    } catch (SQLException e) {
+
+        return new Response<>(false, "Error: " + e.getMessage(), null, null);
     }
+}
 
     // ELIMINAR
-    public Response<Alerta> eliminar(String mensaje) throws Exception {
+    public Response<Alerta> eliminar(int idAlerta) throws Exception {
 
-        try {
+    try {
 
-            int filas;
-            try (Connection cn = getConnection()) {
-                String sql = "DELETE FROM alerta WHERE mensaje=?";
-                PreparedStatement ps = cn.prepareStatement(sql);
-                ps.setString(1, mensaje);
-                filas = ps.executeUpdate();
-            }
+        int filas;
 
-            if (filas > 0) {
+        try (Connection cn = getConnection()) {
 
-                return new Response<>(true, "Alerta eliminada", null, null);
+            String sql = "DELETE FROM alerta WHERE idAlerta=?";
 
-            } else {
+            PreparedStatement ps = cn.prepareStatement(sql);
 
-                return new Response<>(false, "No existe la alerta", null, null);
-            }
+            ps.setInt(1, idAlerta);
 
-        } catch (SQLException e) {
-
-            return new Response<>(false, "Error: " + e.getMessage(), null, null);
+            filas = ps.executeUpdate();
         }
+
+        if (filas > 0) {
+
+            return new Response<>(true, "Alerta eliminada", null, null);
+
+        } else {
+
+            return new Response<>(false, "No existe la alerta", null, null);
+        }
+
+    } catch (SQLException e) {
+
+        return new Response<>(false, "Error: " + e.getMessage(), null, null);
     }
+}
 
     // BUSCAR POR MENSAJE
-    public Response<Alerta> obtenerPorMensaje(String mensaje) throws Exception {
+    public Response<Alerta> obtenerPorId(int idAlerta) throws Exception {
 
-        try {
+    try {
 
-            Alerta a;
-            try (Connection cn = getConnection()) {
-                String sql = "SELECT * FROM alerta WHERE mensaje=?";
-                PreparedStatement ps = cn.prepareStatement(sql);
-                ps.setString(1, mensaje);
-                ResultSet rs = ps.executeQuery();
-                a = null;
-                if (rs.next()) {
+        Alerta a = null;
 
-                    a = new Alerta(
-                            rs.getString("mensaje"),
-                            rs.getDate("fechaAlerta").toLocalDate()
-                    );
-                }
+        try (Connection cn = getConnection()) {
+
+            String sql = "SELECT * FROM alerta WHERE idAlerta=?";
+
+            PreparedStatement ps = cn.prepareStatement(sql);
+
+            ps.setInt(1, idAlerta);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                a = new Alerta(
+                        rs.getInt("idAlerta"),
+                        rs.getString("mensaje"),
+                        rs.getDate("fechaAlerta").toLocalDate(),
+                        rs.getInt("idUsuario")
+                );
             }
-
-            if (a != null) {
-
-                return new Response<>(true, "Alerta encontrada", a, null);
-
-            } else {
-
-                return new Response<>(false, "No existe la alerta", null, null);
-            }
-
-        } catch (SQLException e) {
-
-            return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
+
+        if (a != null) {
+
+            return new Response<>(true, "Alerta encontrada", a, null);
+
+        } else {
+
+            return new Response<>(false, "No existe la alerta", null, null);
+        }
+
+    } catch (SQLException e) {
+
+        return new Response<>(false, "Error: " + e.getMessage(), null, null);
     }
+}
 
     // LISTAR TODAS
     public Response<Alerta> obtenerTodos() throws Exception {
 
-        try {
+    try {
 
-            List<Alerta> lista;
-            try (Connection cn = getConnection()) {
-                String sql = "SELECT * FROM alerta";
-                Statement st = cn.createStatement();
-                ResultSet rs = st.executeQuery(sql);
-                lista = new ArrayList<>();
-                while (rs.next()) {
+        List<Alerta> lista = new ArrayList<>();
 
-                    Alerta a = new Alerta(
-                            rs.getString("mensaje"),
-                            rs.getDate("fechaAlerta").toLocalDate()
-                    );
+        try (Connection cn = getConnection()) {
 
-                    lista.add(a);
-                }
+            String sql = "SELECT * FROM alerta";
+
+            Statement st = cn.createStatement();
+
+            ResultSet rs = st.executeQuery(sql);
+
+            while (rs.next()) {
+
+                Alerta a = new Alerta(
+                        rs.getInt("idAlerta"),
+                        rs.getString("mensaje"),
+                        rs.getDate("fechaAlerta").toLocalDate(),
+                        rs.getInt("idUsuario")
+                );
+
+                lista.add(a);
             }
-
-            return new Response<>(true, "Lista de alertas obtenida", null, lista);
-
-        } catch (SQLException e) {
-
-            return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
+
+        return new Response<>(true, "Lista de alertas obtenida", null, lista);
+
+    } catch (SQLException e) {
+
+        return new Response<>(false, "Error: " + e.getMessage(), null, null);
     }
+}
 }
