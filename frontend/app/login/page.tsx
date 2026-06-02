@@ -6,36 +6,79 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Para redirigir después del login exitoso
 import Link from 'next/link';
-import { 
-  Eye, 
-  EyeOff, 
-  Mail, 
-  Lock, 
-  ArrowRight, 
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  ArrowRight,
   Plus,
-  TrendingUp, 
-  ArrowDownCircle, 
-  Target, 
+  TrendingUp,
+  ArrowDownCircle,
+  Target,
   GraduationCap,
   ShieldCheck
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí irá la lógica de autenticación con el backend más adelante
-    console.log('Login intent:', { email, password });
+
+    setIsLoading(true); // Activa el estado de carga visual en el botón
+
+    console.log('Intentando conectar con Apache Tomcat...', { email, password });
+
+    try {
+      // Parámetros en el formato que request.getParameter() espera en el backend de Java
+      const params = new URLSearchParams();
+      params.append('correo', email);
+      params.append('contrasena', password);
+
+      // Apuntamos a la ruta exacta del urlPattern de tu servlet: /login
+      const response = await fetch('http://localhost:8080/FinanziApp/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
+      });
+
+      // Procesamos la respuesta que nos devuelva el backend
+      if (response.ok) {
+        const data = await response.json();
+
+        if (data.estado) {
+          console.log('¡Inicio de sesión exitoso!');
+          alert(data.mensaje || '¡Inicio de sesión exitoso!');
+          router.push('/dashboard'); // Descomentar cuando definas la ruta de tu dashboard
+        } else {
+          alert(data.mensaje || 'Credenciales incorrectas');
+        }
+      } else {
+        console.error('Error en la respuesta del servidor:', response.status);
+        alert('Hubo un problema en el servidor al intentar iniciar sesión.');
+      }
+
+    } catch (error) {
+      console.error('Error de red:', error);
+      alert('No se pudo establecer conexión con el backend de Java.');
+    } finally {
+      setIsLoading(false); // Apaga el estado de carga pase lo que pase (éxito o error)
+    }
   };
 
   return (
     <div className="min-h-screen w-full grid lg:grid-cols-2 bg-background">
-      
+
       {/* ---------------- PANEL IZQUIERDO: DESCRIPTIVO (Solo visible en desktop) ---------------- */}
       <div className="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-background border-r">
         {/* Efecto de luces de fondo */}
@@ -101,10 +144,10 @@ export default function LoginPage() {
 
       {/* ---------------- PANEL DERECHO: FORMULARIO DE LOGIN ---------------- */}
       <div className="flex flex-col justify-center items-center px-6 py-12 lg:p-16 h-full relative">
-        
+
         {/* Contenedor centralizado del formulario */}
         <div className="w-full max-w-[400px] space-y-6">
-          
+
           {/* Cabecera del formulario */}
           <div className="space-y-2 text-center lg:text-left">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">
@@ -117,7 +160,7 @@ export default function LoginPage() {
 
           {/* Formulario Nativo */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            
+
             {/* Input Correo electrónico */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-foreground tracking-wide">
@@ -142,8 +185,8 @@ export default function LoginPage() {
                 <label className="text-xs font-semibold text-foreground tracking-wide">
                   Contraseña
                 </label>
-                <Link 
-                  href="/forgot-password" 
+                <Link
+                  href="/forgot-password"
                   className="text-xs font-medium text-primary hover:underline transition-all"
                 >
                   ¿Olvidaste tu contraseña?
@@ -169,13 +212,30 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Botón Principal: Iniciar Sesión */}
+            {/* Botón Principal: Iniciar Sesión con Estado Dinámico de Carga */}
             <button
               type="submit"
-              className="w-full mt-2 flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
+              disabled={isLoading}
+              className={cn(
+                "w-full mt-2 flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors",
+                isLoading && "opacity-50 cursor-not-allowed"
+              )}
             >
-              <ArrowRight className="h-4 w-4" />
-              Iniciar sesión
+              {isLoading ? (
+                <>
+                  {/* Animación de carga (Spinner SVG) */}
+                  <svg className="animate-spin h-4 w-4 text-current" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Iniciando sesión...
+                </>
+              ) : (
+                <>
+                  <ArrowRight className="h-4 w-4" />
+                  Iniciar sesión
+                </>
+              )}
             </button>
 
             {/* Botón Secundario: Crear Cuenta */}
@@ -195,9 +255,8 @@ export default function LoginPage() {
             <div className="flex-grow border-t border-muted" />
           </div>
 
-          {/* Botones de Auth de Terceros (Google) - Ahora centrado */}
+          {/* Botones de Auth de Terceros (Google) */}
           <div className="flex justify-center w-full">
-            {/* Botón Google */}
             <button className="flex items-center justify-center gap-3 py-2.5 px-6 w-full sm:w-auto min-w-[150px] rounded-lg border bg-card text-xs font-semibold text-foreground hover:bg-muted transition-colors">
               <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path fill="#EA4335" d="M12 5.04c1.64 0 3.12.56 4.28 1.67l3.2-3.2C17.52 1.58 14.96 1 12 1 7.35 1 3.4 3.65 1.5 7.5l3.6 2.8C6.01 7.14 8.74 5.04 12 5.04z" />
