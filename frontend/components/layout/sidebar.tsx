@@ -38,7 +38,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
  */
 const sidebarItems = [
   { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard', href: '/' },
-  { id: 'ingresos', label: 'Ingresos', icon: 'wallet', href: '/ingresos' },
+  { id: 'cuentas', label: 'Cuentas', icon: 'wallet', href: '/cuentas' },
   { id: 'presupuestos', label: 'Presupuestos', icon: 'pie-chart', href: '/presupuestos' },
   { id: 'metas', label: 'Metas', icon: 'target-2', href: '/metas' },
   { id: 'informes', label: 'Informes', icon: 'bar-chart-2', href: '/informes' },

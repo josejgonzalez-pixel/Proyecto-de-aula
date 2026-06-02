@@ -42,7 +42,7 @@ export default function RegisterPage() {
       params.append('contrasena', password);
 
       // 2. Enviamos la petición POST a tu nuevo servlet de registro
-      const response = await fetch('http://localhost:8080/FinanziApp/registro', {
+      const response = await fetch('http://localhost:8080/FinanziApp/api/registro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
