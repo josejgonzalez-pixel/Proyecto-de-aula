@@ -19,6 +19,11 @@ public class UsuarioService {
     public UsuarioService() {
         repo = new UsuarioDao();
     }
+    
+       // REGISTRAR USUARIO
+    public Response<Usuario> RegistrarNuevoUsuario(Usuario usuario) {
+        return repo.RegistrarNuevoUsuario(usuario);
+    }
 
     // INSERTAR
     public Response<Usuario> insertar(Usuario usuario) {

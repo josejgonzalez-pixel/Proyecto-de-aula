@@ -16,6 +16,56 @@ import java.util.List;
  */
 public class UsuarioDao extends BaseDao{
     
+    // REGISTRAR NUEVO USUARIO
+    public Response<Usuario> RegistrarNuevoUsuario(Usuario u) {
+
+    try {
+
+        // Verificar si el correo ya existe
+        String sqlVerificar = "SELECT * FROM usuario WHERE correo=?";
+
+        Connection cn = getConnection();
+        PreparedStatement psVerificar = cn.prepareStatement(sqlVerificar);
+
+        psVerificar.setString(1, u.getCorreo());
+
+        ResultSet rs = psVerificar.executeQuery();
+
+        if (rs.next()) {
+            cn.close();
+
+            return new Response<>(false, "El correo ya se encuentra registrado", null, null);
+        }
+
+        // Registrar usuario
+        String sqlInsertar = "INSERT INTO usuario(nombre, correo, contrasena) VALUES(?,?,?)";
+
+        PreparedStatement psInsertar = cn.prepareStatement(
+                sqlInsertar,
+                Statement.RETURN_GENERATED_KEYS
+        );
+
+        psInsertar.setString(1, u.getNombre());
+        psInsertar.setString(2, u.getCorreo());
+        psInsertar.setString(3, u.getContrasena());
+
+        psInsertar.executeUpdate();
+
+        ResultSet rsId = psInsertar.getGeneratedKeys();
+
+        if (rsId.next()) {
+            u.setIdUsuario(rsId.getInt(1));
+        }
+
+        cn.close();
+
+        return new Response<>(true, "Usuario registrado correctamente", u,null);
+
+    } catch (Exception e) {
+
+        return new Response<>(false, "Error al registrar usuario: " + e.getMessage(), null, null);
+    }
+}
     // INSERTAR USUARIO
     public Response<Usuario> insertar(Usuario u) {
 
