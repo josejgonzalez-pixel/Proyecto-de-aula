@@ -13,7 +13,7 @@ import Model.Alerta;
  */
 public class AlertaService {
 
-    private AlertaDao repo;
+     private AlertaDao repo;
 
     public AlertaService() {
         repo = new AlertaDao();
@@ -30,13 +30,13 @@ public class AlertaService {
     }
 
     // ELIMINAR
-    public Response<Alerta> eliminar(String mensaje) throws Exception {
-        return repo.eliminar(mensaje);
+    public Response<Alerta> eliminar(int idAlerta) throws Exception {
+        return repo.eliminar(idAlerta);
     }
 
-    // OBTENER POR MENSAJE
-    public Response<Alerta> obtenerPorMensaje(String mensaje) throws Exception {
-        return repo.obtenerPorMensaje(mensaje);
+    // OBTENER POR ID
+    public Response<Alerta> obtenerPorId(int idAlerta) throws Exception {
+        return repo.obtenerPorId(idAlerta);
     }
 
     // OBTENER TODAS
@@ -45,15 +45,14 @@ public class AlertaService {
     }
 
     // ENVIAR ALERTA
-    public void enviarAlerta(String mensaje) throws Exception {
+    public void enviarAlerta(int idAlerta) throws Exception {
 
-        Response<Alerta> respuesta =
-                repo.obtenerPorMensaje(mensaje);
+        Response<Alerta> respuesta = repo.obtenerPorId(idAlerta);
 
         if (respuesta.isEstado()
-            && respuesta.getEntidad() != null) {
+                && respuesta.getEntidad() != null) {
 
             respuesta.getEntidad().enviarAlerta();
-        } 
+        }
     }
 }

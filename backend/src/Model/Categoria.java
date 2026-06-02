@@ -14,6 +14,9 @@ public class Categoria {
     private String nombreCategoria;
     private String tipo;
 
+    public Categoria() {
+    }
+
     public Categoria(int idCategoria, String nombreCategoria, String tipo) {
         this.idCategoria = idCategoria;
         this.nombreCategoria = nombreCategoria;
