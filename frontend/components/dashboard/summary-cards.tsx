@@ -10,6 +10,9 @@ import { TrendingUp, TrendingDown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/data';
 import { cn } from '@/lib/utils';
+import { useDashboardData } from '@/hooks/use-dashboard-data';
+import { Skeleton } from '../ui/skeleton';
+
 
 /**
  * Props para una tarjeta de resumen individual
@@ -78,23 +81,40 @@ function SummaryCard({ title, amount, type = 'total', showTrend, trendLabel }: S
  * Grid de tarjetas de resumen financiero
  */
 export function SummaryCards() {
+  const { saldo, ingresos, gastos, loading } = useDashboardData();
+
+console.log("daotos en componte:",{saldo, ingresos, gastos});
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-3 gap-3 lg:gap-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-24 rounded-xl border p-4">
+            <Skeleton className="h-4 w-20 mb-2" />
+            <Skeleton className="h-8 w-full" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-3  md:grid-cols-3 gap-3 lg:gap-4">
       <SummaryCard
         title="Saldo Total"
-        amount={1250000}
+        amount={saldo}
         type="total"
       />
       <SummaryCard
         title="Ingresos del Mes"
-        amount={3500000}
+        amount={ingresos}
         type="income"
         showTrend
         trendLabel="Ingreso"
       />
       <SummaryCard
         title="Gastos del Mes"
-        amount={2250000}
+        amount={gastos}
         type="expense"
         showTrend
         trendLabel="Gasto"

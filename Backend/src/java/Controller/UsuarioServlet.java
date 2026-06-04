@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "UsuarioServlet", urlPatterns = {"/login"})
+@WebServlet(name = "UsuarioServlet", urlPatterns = {"/api/login"})
 public class UsuarioServlet extends HttpServlet {
 
     private final UsuarioService usuarioService = new UsuarioService();

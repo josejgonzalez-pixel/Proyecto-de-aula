@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Service.TransaccionService;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "TransaccionServlet", urlPatterns = {"/api/transacciones"})
 public class TransaccionServlet extends HttpServlet{
+    private final TransaccionService service = new TransaccionService();
     private final Gson gson = new Gson();
 
     @Override
@@ -43,6 +45,31 @@ public class TransaccionServlet extends HttpServlet{
             out.flush();
         }
     }
+    
+    @Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    response.setContentType("application/json;charset=UTF-8");
+    String accion = request.getParameter("accion");
+    
+    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    response.setContentType("application/json;charset=UTF-8");
+    
+    try {
+        if ("resumen".equals(accion)) {
+            // Caso: Resumen para Dashboard
+            // Nota: Aquí podrías obtener el idUsuario de la sesión o parámetro
+            response.getWriter().print(gson.toJson(service.obtenerResumen(1)));
+            
+        } else {
+            // Caso: Listar todas las transacciones (La tabla principal)
+            response.getWriter().print(gson.toJson(service.obtenerTodos(1)));
+        }
+    } catch (Exception e) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        response.getWriter().print("{\"error\":\"" + e.getMessage() + "\"}");
+    }
+}
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response)

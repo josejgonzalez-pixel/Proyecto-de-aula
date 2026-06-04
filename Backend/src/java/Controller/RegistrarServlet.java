@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jos13
  */
-@WebServlet(name ="RegistrarServlet", urlPatterns = {"/registro"})
+@WebServlet(name ="RegistrarServlet", urlPatterns = {"/api/registro"})
 public class RegistrarServlet extends HttpServlet{
     private UsuarioService usuarioService;
     private Gson gson;

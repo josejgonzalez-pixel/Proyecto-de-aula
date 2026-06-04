@@ -23,7 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import javax.servlet.ServletException;
 
-@WebServlet("/meta")
+@WebServlet("/api/meta")
 public class MetaServlet extends HttpServlet {
 
     private final MetaService service = new MetaService();

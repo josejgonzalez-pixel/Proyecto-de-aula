@@ -40,7 +40,7 @@ export default function LoginPage() {
       params.append('contrasena', password);
 
       // Apuntamos a la ruta correcta del urlPattern: /login
-      const response = await fetch('http://localhost:8080/FinanziApp/login', {
+      const response = await fetch('http://localhost:8080/FinanziApp/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

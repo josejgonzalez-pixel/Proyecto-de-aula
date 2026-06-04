@@ -13,13 +13,40 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author hp
  */
 public class TransaccionDao extends BaseDao {
+
+    public Map<String, Double> obtenerResumen(int idUsuario) throws Exception {
+        Map<String, Double> datos = new HashMap<>();
+        String sql = "SELECT "
+                + "SUM(CASE WHEN c.tipo = 'Ingreso' THEN t.monto ELSE 0 END) as totalIngresos, "
+                + "SUM(CASE WHEN c.tipo = 'Gasto' THEN t.monto ELSE 0 END) as totalGastos "
+                + "FROM Transaccion t "
+                + "JOIN Categoria c ON t.idCategoria = c.idCategoria "
+                + "WHERE t.idUsuario = ?";
+
+        // Aquí usas tu método getConnection() existente
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    double ingresos = rs.getDouble("totalIngresos");
+                    double gastos = rs.getDouble("totalGastos");
+                    datos.put("ingresos", ingresos);
+                    datos.put("gastos", gastos);
+                    datos.put("saldo", ingresos - gastos);
+                }
+            }
+        }
+        return datos;
+    }
 
     // INSERTAR TRANSACCION
     public Response<Transaccion> insertar(Transaccion t) throws Exception {
@@ -176,41 +203,27 @@ public class TransaccionDao extends BaseDao {
     }
 
     // OBTENER TODAS LAS TRANSACCIONES
-    public Response<Transaccion> obtenerTodos() throws Exception {
+    public Response<Transaccion> obtenerTodosPorUsuario(int idUsuario) throws Exception {
+        String sql = "SELECT * FROM Transaccion WHERE idUsuario = ?";
+        List<Transaccion> lista = new ArrayList<>();
 
-        try {
-
-            List<Transaccion> lista = new ArrayList<>();
-
-            String sql = "SELECT * FROM Transaccion";
-
-            try (Connection cn = getConnection()) {
-
-                Statement st = cn.createStatement();
-
-                ResultSet rs = st.executeQuery(sql);
-
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-
-                    Transaccion t = new Transaccion(
+                    lista.add(new Transaccion(
                             rs.getInt("idTransaccion"),
                             rs.getDouble("monto"),
                             rs.getDate("fecha").toLocalDate(),
                             rs.getString("descripcion"),
                             rs.getInt("idUsuario"),
                             rs.getInt("idCategoria")
-                    ) {
-                    };
-
-                    lista.add(t);
+                    ) {});
                 }
             }
-
-            return new Response<>(true, "Lista de transacciones obtenida",null, lista);
-
         } catch (SQLException e) {
-
             return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
+        return new Response<>(true, "Lista obtenida", null, lista);
     }
 }

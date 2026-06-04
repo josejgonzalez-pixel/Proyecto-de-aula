@@ -7,6 +7,8 @@ package Service;
 import Util.Response;
 import DAO.TransaccionDao;
 import Model.Transaccion;
+import java.util.Map;
+
 /**
  *
  * @author hp
@@ -15,10 +17,14 @@ public class TransaccionService {
 
     private TransaccionDao repo;
 
+    public Map<String, Double> obtenerResumen(int idUsuario) throws Exception {
+        return repo.obtenerResumen(idUsuario);
+    }
+
     public TransaccionService() {
         repo = new TransaccionDao();
     }
-
+    
     // INSERTAR
     public Response<Transaccion> insertar(Transaccion t) throws Exception {
         return repo.insertar(t);
@@ -40,25 +46,7 @@ public class TransaccionService {
     }
 
     // LISTAR TODAS
-    public Response<Transaccion> obtenerTodos() throws Exception {
-        return repo.obtenerTodos();
-    }
-
-    // OBTENER BALANCE TOTAL
-    public double obtenerBalanceTotal() throws Exception {
-
-        double total = 0;
-
-        Response<Transaccion> respuesta = repo.obtenerTodos();
-
-        if (respuesta.getLista() != null) {
-
-            for (var t : respuesta.getLista()) {
-
-                total += t.getMonto();
-            }
-        }
-
-        return total;
+    public Response<Transaccion> obtenerTodos(int idUsuario) throws Exception {
+        return repo.obtenerTodosPorUsuario(idUsuario);
     }
 }

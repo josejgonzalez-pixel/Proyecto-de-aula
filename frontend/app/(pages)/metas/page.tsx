@@ -20,7 +20,7 @@ function FormularioMeta({ onGuardar }: { onGuardar: () => void }) {
     formData.append('idUsuario', '1'); // Ajustar según ID real de sesión
 
     try {
-      const res = await fetch('http://localhost:8080/FinanziApp/meta', {
+      const res = await fetch('http://localhost:8080/FinanziApp/api/meta', {
         method: 'POST',
         body: new URLSearchParams(formData as any),
       });
@@ -83,7 +83,7 @@ export default function MetasPage() {
 
   const cargarMetas = async () => {
     try {
-      const res = await fetch('http://localhost:8080/FinanziApp/meta');
+      const res = await fetch('http://localhost:8080/FinanziApp/api/meta');
       const data = await res.json();
       setMetas(data.estado && data.lista ? data.lista : []);
     } catch (error) {
@@ -95,7 +95,7 @@ export default function MetasPage() {
   const eliminarMeta = async (id: number) => {
     if (!confirm("¿Eliminar esta meta?")) return;
     const params = new URLSearchParams({ accion: 'eliminar', idMeta: id.toString() });
-    await fetch('http://localhost:8080/FinanziApp/meta', { method: 'POST', body: params });
+    await fetch('http://localhost:8080/FinanziApp/api/meta', { method: 'POST', body: params });
     cargarMetas();
   };
 
