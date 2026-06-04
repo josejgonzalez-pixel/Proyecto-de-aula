@@ -26,7 +26,7 @@ export function CategoryChart() {
       <CardContent>
         <div className="flex items-center gap-4">
           {/* Gráfico de dona */}
-          <div className="h-[140px] w-[140px]">
+          <div className="h-[140px] w-[140px] relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie

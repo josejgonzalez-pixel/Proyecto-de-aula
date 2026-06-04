@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.servlet.annotation.WebServlet;
@@ -68,27 +69,36 @@ public class MetaServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        setCORSHeaders(response);
-
-        try {
-            // Nota: Asegúrate de que los nombres de parámetros coincidan exactamente con tu frontend
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    setCORSHeaders(response);
+    String accion = request.getParameter("accion");
+    PrintWriter out = response.getWriter();
+    
+    try {
+        if ("eliminar".equals(accion)) {
+            int id = Integer.parseInt(request.getParameter("idMeta"));
+            out.print(gson.toJson(service.eliminar(id)));
+        } else if ("insertar".equals(accion) || "actualizar".equals(accion)) {
             Meta m = new Meta(
-                    0,
-                    request.getParameter("nombreMeta"),
-                    Double.parseDouble(request.getParameter("montoMeta")),
-                    Double.parseDouble(request.getParameter("montoActual")),
-                    LocalDate.parse(request.getParameter("fechaLimite")),
-                    Integer.parseInt(request.getParameter("idUsuario"))
+                "actualizar".equals(accion) ? Integer.parseInt(request.getParameter("idMeta")) : 0,
+                request.getParameter("nombreMeta"),
+                Double.parseDouble(request.getParameter("montoMeta")),
+                Double.parseDouble(request.getParameter("montoActual")),
+                LocalDate.parse(request.getParameter("fechaLimite")),
+                Integer.parseInt(request.getParameter("idUsuario"))
             );
-
-            Response<Meta> r = service.insertar(m);
-            response.getWriter().print(gson.toJson(r));
-        } catch (Exception e) {
-            response.getWriter().print(gson.toJson(new Response<>(false, "Error: " + e.getMessage(), null, null)));
+            out.print(gson.toJson("insertar".equals(accion) ? service.insertar(m) : service.actualizar(m)));
+        } else {
+            // Acción por defecto: listar
+            out.print(gson.toJson(service.obtenerTodos()));
         }
+    } catch (Exception e) {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        out.print(gson.toJson(new Response<>(false, e.getMessage(), null, null)));
+    } finally {
+        out.flush();
     }
+}
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)

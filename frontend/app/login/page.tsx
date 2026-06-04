@@ -20,14 +20,15 @@ import {
   GraduationCap,
   ShieldCheck
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     console.log('Intentando conectar con Apache Tomcat...', { email, password });
@@ -38,8 +39,8 @@ export default function LoginPage() {
       params.append('correo', email);
       params.append('contrasena', password);
 
-      // Apuntamos a la ruta correcta del urlPattern: /api/login
-      const response = await fetch('http://localhost:8080/FinanziApp/api/login', {
+      // Apuntamos a la ruta correcta del urlPattern: /login
+      const response = await fetch('http://localhost:8080/FinanziApp/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -47,20 +48,14 @@ export default function LoginPage() {
         body: params.toString(),
       });
 
-      // 2. Procesamos la respuesta que nos devuelva el backend
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json();
+      if (data.estado) {
+      document.cookie = `auth_token=true; path=/; max-age=86400; SameSite=Lax`; // Guarda el token en una cookie por 1 hora
 
-        if (data.estado) {
-          console.log('¡Inicio de sesión exitoso!');
-          alert(data.mensaje || '¡Inicio de sesión exitoso!');
-          // router.push('/dashboard'); // Redirige al dashboard o página principal después del login
-        } else {
-          alert(data.mensaje || 'Credenciales incorrectas');
-        }
-      } else {
-        console.error('Error en la respuesta del servidor:', response.status);
-        alert('Hubo un problema en el servidor al intentar iniciar sesión.');
+      console.log('Login exitoso, redirigiendo al dashboard...');
+      router.push('/dashboard');
+      }else {
+        alert(data.mensaje || 'Correo o contraseña incorrectos');
       }
 
     } catch (error) {
@@ -152,7 +147,7 @@ export default function LoginPage() {
           </div>
 
           {/* Formulario Nativo */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
 
             {/* Input Correo electrónico */}
             <div className="space-y-1.5">
@@ -223,27 +218,6 @@ export default function LoginPage() {
               Crear cuenta
             </Link>
           </form>
-
-          {/* Divisor "O continúa con" */}
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-muted" />
-            <span className="flex-shrink mx-4 text-xs text-muted-foreground tracking-wide">o continúa con</span>
-            <div className="flex-grow border-t border-muted" />
-          </div>
-
-          {/* Botones de Auth de Terceros (Google) - Ahora centrado */}
-          <div className="flex justify-center w-full">
-            {/* Botón Google */}
-            <button className="flex items-center justify-center gap-3 py-2.5 px-6 w-full sm:w-auto min-w-[150px] rounded-lg border bg-card text-xs font-semibold text-foreground hover:bg-muted transition-colors">
-              <svg className="h-4 w-4" viewBox="0 0 24 24">
-                <path fill="#EA4335" d="M12 5.04c1.64 0 3.12.56 4.28 1.67l3.2-3.2C17.52 1.58 14.96 1 12 1 7.35 1 3.4 3.65 1.5 7.5l3.6 2.8C6.01 7.14 8.74 5.04 12 5.04z" />
-                <path fill="#4285F4" d="M23.5 12.25c0-.82-.07-1.6-.2-2.35H12v4.45h6.45c-.28 1.47-1.11 2.71-2.36 3.55l3.6 2.8c2.1-1.94 3.31-4.8 3.31-8.45z" />
-                <path fill="#FBBC05" d="M5.1 14.7c-.23-.68-.35-1.4-.35-2.2s.12-1.52.35-2.2L1.5 7.5C.54 9.4 0 11.6 0 12s.54 2.6 1.5 4.5l3.6-2.8z" />
-                <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.6-2.8c-1.1.74-2.52 1.18-4.36 1.18-3.26 0-5.99-2.1-6.98-5.26l-3.6 2.8C3.4 20.35 7.35 23 12 23z" />
-              </svg>
-              Google
-            </button>
-          </div>
 
         </div>
       </div>

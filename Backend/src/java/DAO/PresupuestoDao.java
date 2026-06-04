@@ -48,7 +48,7 @@ public class PresupuestoDao extends BaseDao {
             return new Response<>(true, "Presupuesto registrado", p,null);
 
         } catch (SQLException e) {
-
+            
             return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
