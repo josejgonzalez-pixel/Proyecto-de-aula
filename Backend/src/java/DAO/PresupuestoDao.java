@@ -26,15 +26,17 @@ public class PresupuestoDao extends BaseDao {
         try {
 
             try (Connection cn = getConnection()) {
-                String sql = "INSERT INTO Presupuesto " + "(montoInicial, montoActual, fechaCreacion, idUsuario) "
-                        + "VALUES (?, ?, ?, ?)";
+                String sql = "INSERT INTO Presupuesto "
+                         + "(nombre, montoInicial, montoActual, fechaCreacion, idUsuario) "
+                         + "VALUES (?, ?, ?, ?, ?)";
                 
                 PreparedStatement ps = cn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                 
-                ps.setDouble(1, p.getMontoInicial());
-                ps.setDouble(2, p.getMontoActual());
-                ps.setDate(3, Date.valueOf(p.getFechaCreacion()));
-                ps.setInt(4, p.getIdUsuario());
+                ps.setString(1, p.getNombre());
+                ps.setDouble(2, p.getMontoInicial());
+                ps.setDouble(3, p.getMontoActual());
+                ps.setDate(4, Date.valueOf(p.getFechaCreacion()));
+                ps.setInt(5, p.getIdUsuario());
                 
                 ps.executeUpdate();
                 
@@ -61,17 +63,19 @@ public class PresupuestoDao extends BaseDao {
             int filas;
             try (Connection cn = getConnection()) {
                 String sql = "UPDATE Presupuesto SET "
+                        + "nombre=?, "
                         + "montoInicial=?, "
                         + "montoActual=?, "
                         + "fechaCreacion=?, "
                         + "idUsuario=? "
                         + "WHERE idPresupuesto=?";
                 PreparedStatement ps = cn.prepareStatement(sql);
-                ps.setDouble(1, p.getMontoInicial());
-                ps.setDouble(2, p.getMontoActual());
-                ps.setDate(3, Date.valueOf(p.getFechaCreacion()));
-                ps.setInt(4, p.getIdUsuario());
-                ps.setInt(5, p.getIdPresupuesto());
+                ps.setString(1, p.getNombre());
+                ps.setDouble(2, p.getMontoInicial());
+                ps.setDouble(3, p.getMontoActual());
+                ps.setDate(4, Date.valueOf(p.getFechaCreacion()));
+                ps.setInt(5, p.getIdUsuario());
+                ps.setInt(6, p.getIdPresupuesto());
                 filas = ps.executeUpdate();
             }
 
@@ -133,11 +137,12 @@ public class PresupuestoDao extends BaseDao {
                 if (rs.next()) {
                     
                     p = new Presupuesto(
-                            rs.getInt("idPresupuesto"),
-                            rs.getDouble("montoInicial"),
-                            rs.getDouble("montoActual"),
-                            rs.getDate("fechaCreacion").toLocalDate(),
-                            rs.getInt("idUsuario")
+                    rs.getInt("idPresupuesto"),
+                    rs.getString("nombre"),
+                    rs.getDouble("montoInicial"),
+                    rs.getDouble("montoActual"),
+                    rs.getDate("fechaCreacion").toLocalDate(),
+                    rs.getInt("idUsuario")
                     );
                 }
             }
@@ -171,11 +176,12 @@ public class PresupuestoDao extends BaseDao {
                 while (rs.next()) {
                     
                     Presupuesto p = new Presupuesto(
-                            rs.getInt("idPresupuesto"),
-                            rs.getDouble("montoInicial"),
-                            rs.getDouble("montoActual"),
-                            rs.getDate("fechaCreacion").toLocalDate(),
-                            rs.getInt("idUsuario")
+                    rs.getInt("idPresupuesto"),
+                    rs.getString("nombre"),
+                    rs.getDouble("montoInicial"),
+                    rs.getDouble("montoActual"),
+                    rs.getDate("fechaCreacion").toLocalDate(),
+                    rs.getInt("idUsuario")
                     );
                     
                     lista.add(p);

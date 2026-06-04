@@ -63,8 +63,10 @@ CREATE TABLE Meta (
     REFERENCES Usuario(idUsuario)
 );
 
+
 CREATE TABLE Presupuesto (
     idPresupuesto INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
     montoInicial DOUBLE NOT NULL,
     montoActual DOUBLE NOT NULL,
     fechaCreacion DATE NOT NULL,

@@ -3,7 +3,7 @@ USE finanziapp;
 INSERT INTO Usuario (nombre, correo, contrasena)
 VALUES 
 ('Camila Padilla', 'camila@gmail.com', '1234'),
-('Juan Perez', 'juan@gmail.com', '1325');
+('Juan Perez', 'juan@gmail.com', '1234');
 
 INSERT INTO Categoria (nombreCategoria, tipo)
 VALUES 
@@ -30,9 +30,15 @@ INSERT INTO Meta (nombreMeta, montoMeta, montoActual, fechaLimite, idUsuario)
 VALUES 
 ('Comprar laptop', 3000000, 500000, '2026-12-31', 1);
 
-INSERT INTO Presupuesto (montoInicial, montoActual, fechaCreacion, idUsuario)
-VALUES 
-(1000000, 850000, '2026-01-01', 1);
+INSERT INTO Presupuesto
+(nombre, montoInicial, montoActual, fechaCreacion, idUsuario)
+VALUES
+('Cuenta Nómina', 1000000, 850000, '2026-01-01', 1);
+
+INSERT INTO Presupuesto
+(nombre, montoInicial, montoActual, fechaCreacion, idUsuario)
+VALUES
+('Mercado Mensual', 300000, 180000, '2026-03-05', 1);
 
 INSERT INTO Reporte (tipoReporte, fechaGeneracion, idUsuario)
 VALUES 

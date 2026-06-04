@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class Presupuesto {
     
     private int idPresupuesto;
+    private String nombre;
     private double montoInicial;
     private double montoActual;
     private LocalDate fechaCreacion;
@@ -21,16 +22,13 @@ public class Presupuesto {
     public Presupuesto() {
     }
 
-    public Presupuesto(int idPresupuesto, double montoInicial, double montoActual, LocalDate fechaCreacion, int idUsuario) {
+    public Presupuesto(int idPresupuesto, String nombre, double montoInicial, double montoActual, LocalDate fechaCreacion, int idUsuario) {
         this.idPresupuesto = idPresupuesto;
+        this.nombre = nombre;
         this.montoInicial = montoInicial;
         this.montoActual = montoActual;
         this.fechaCreacion = fechaCreacion;
         this.idUsuario = idUsuario;
-    }
-    
-    public boolean verificarLimite() {
-        return montoActual <= 0;
     }
 
     public int getIdPresupuesto() {
@@ -39,6 +37,14 @@ public class Presupuesto {
 
     public void setIdPresupuesto(int idPresupuesto) {
         this.idPresupuesto = idPresupuesto;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public double getMontoInicial() {
@@ -71,5 +77,9 @@ public class Presupuesto {
 
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
+    }
+    
+    public boolean verificarLimite() {
+        return montoActual <= 0;
     }
 }

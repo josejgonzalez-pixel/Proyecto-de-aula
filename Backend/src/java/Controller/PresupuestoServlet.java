@@ -95,6 +95,7 @@ public class PresupuestoServlet extends HttpServlet { // Extiende de HttpServlet
         } 
         else {
             // AQUÍ SÍ LEE LOS OTROS PARÁMETROS PORQUE ES "insertar" O "actualizar"
+            String nombre = request.getParameter("nombre");
             double montoInicial = Double.parseDouble(request.getParameter("montoInicial"));
             double montoActual = Double.parseDouble(request.getParameter("montoActual"));
             String fecha = request.getParameter("fechaCreacion");
@@ -102,10 +103,10 @@ public class PresupuestoServlet extends HttpServlet { // Extiende de HttpServlet
             
             if ("actualizar".equals(accion)) {
                 int id = Integer.parseInt(request.getParameter("idPresupuesto"));
-                Presupuesto p = new Presupuesto(id, montoInicial, montoActual, LocalDate.parse(fecha), idUsuario);
+                Presupuesto p = new Presupuesto(id, nombre, montoInicial, montoActual, LocalDate.parse(fecha), idUsuario);
                 out.print(this.gson.toJson(presupuestoDao.actualizar(p)));
             } else {
-                Presupuesto p = new Presupuesto(0, montoInicial, montoActual, LocalDate.parse(fecha), idUsuario);
+                Presupuesto p = new Presupuesto(0, nombre, montoInicial, montoActual, LocalDate.parse(fecha), idUsuario);
                 out.print(this.gson.toJson(presupuestoDao.insertar(p)));
             }
         }
