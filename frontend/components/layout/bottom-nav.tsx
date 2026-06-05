@@ -16,6 +16,7 @@ import {
   BarChart2,
   GraduationCap,
   Settings,
+  Tag,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -30,6 +31,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   'bar-chart': BarChart2,
   'graduation-cap': GraduationCap,
   'settings': Settings,
+  'tag': Tag,
 };
 
 /**
@@ -37,11 +39,11 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
  */
 const navItems = [
   { id: 'home', label: 'Home', icon: 'home', href: '/' },
-  { id: 'cuentas', label: 'Cuentas', icon: 'wallet', href: '/cuentas' },
+  //{ id: 'cuentas', label: 'Cuentas', icon: 'wallet', href: '/cuentas' },
   { id: 'presupuestos', label: 'Presupuestos', icon: 'pie-chart', href: '/presupuestos' },
   { id: 'metas', label: 'Metas', icon: 'target-2', href: '/metas' },
   { id: 'informes', label: 'Informes', icon: 'bar-chart', href: '/informes' },
-  { id: 'educacion', label: 'Educación', icon: 'graduation-cap', href: '/educacion' },
+  { id: 'categorias', label: 'Categorías', icon: 'tag', href: '/categorias' },
   { id: 'ajustes', label: 'Ajustes', icon: 'settings', href: '/ajustes' },
 ];
 

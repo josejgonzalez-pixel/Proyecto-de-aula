@@ -8,6 +8,7 @@ package Controller;
  *
  * @author jos13
  */
+import Model.Usuario;
 import Service.UsuarioService;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -31,7 +32,6 @@ public class UsuarioServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -39,23 +39,19 @@ public class UsuarioServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter out = response.getWriter();
+        Map<String, Object> respuestaJson = new HashMap<>();
 
         try {
             String correo = request.getParameter("correo");
             String contrasena = request.getParameter("contrasena");
 
-            System.out.println("=========================================");
-            System.out.println("LOG DESDE TOMCAT - INTENTO DE LOGIN");
-            System.out.println("Correo recibido en Servlet: [" + correo + "]");
-            System.out.println("Contraseña recibida en Servlet: [" + contrasena + "]");
-            System.out.println("=========================================");
-
             boolean loginExitoso = usuarioService.validarLogin(correo, contrasena);
+            Usuario usuarioLogueado = usuarioService.obtenerUsuarioPorCredenciales(correo, contrasena);
 
-            Map<String, Object> respuestaJson = new HashMap<>();
-            if (loginExitoso) {
+            if (loginExitoso && usuarioLogueado != null) {
                 respuestaJson.put("estado", true);
-                respuestaJson.put("mensaje", "Autenticación exitosa. ¡Bienvenido a FinanziApp!");
+                respuestaJson.put("idUsuario", usuarioLogueado.getIdUsuario());
+                respuestaJson.put("mensaje", "Bienvenido!");
             } else {
                 respuestaJson.put("estado", false);
                 respuestaJson.put("mensaje", "Correo o contraseña incorrectos.");
@@ -64,10 +60,9 @@ public class UsuarioServlet extends HttpServlet {
             out.print(this.gson.toJson(respuestaJson));
 
         } catch (Exception e) {
-            Map<String, Object> errorJson = new HashMap<>();
-            errorJson.put("estado", false);
-            errorJson.put("mensaje", "Error en el servidor: " + e.getMessage());
-            out.print(this.gson.toJson(errorJson));
+            respuestaJson.put("estado", false);
+            respuestaJson.put("mensaje", "Error en el servidor: " + e.getMessage());
+            out.print(this.gson.toJson(respuestaJson));
         } finally {
             out.flush();
             out.close();

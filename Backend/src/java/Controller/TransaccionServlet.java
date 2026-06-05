@@ -18,9 +18,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jos13
  */
-
 @WebServlet(name = "TransaccionServlet", urlPatterns = {"/api/transacciones"})
-public class TransaccionServlet extends HttpServlet{
+public class TransaccionServlet extends HttpServlet {
+
     private final TransaccionService service = new TransaccionService();
     private final Gson gson = new Gson();
 
@@ -35,7 +35,7 @@ public class TransaccionServlet extends HttpServlet{
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter out = response.getWriter();
-        
+
         try {
             // Tu lógica de captura de parámetros aquí (request.getParameter)
             // Lógica de interconexión con las capas de Álvaro y Camila
@@ -45,31 +45,29 @@ public class TransaccionServlet extends HttpServlet{
             out.flush();
         }
     }
-    
+
     @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-    response.setContentType("application/json;charset=UTF-8");
-    String accion = request.getParameter("accion");
-    
-    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-    response.setContentType("application/json;charset=UTF-8");
-    
-    try {
-        if ("resumen".equals(accion)) {
-            // Caso: Resumen para Dashboard
-            // Nota: Aquí podrías obtener el idUsuario de la sesión o parámetro
-            response.getWriter().print(gson.toJson(service.obtenerResumen(1)));
-            
-        } else {
-            // Caso: Listar todas las transacciones (La tabla principal)
-            response.getWriter().print(gson.toJson(service.obtenerTodos(1)));
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setContentType("application/json;charset=UTF-8");
+        String accion = request.getParameter("accion");
+
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setContentType("application/json;charset=UTF-8");
+
+        try {
+            if ("resumen".equals(accion)) {
+                response.getWriter().print(gson.toJson(service.obtenerResumen(1)));
+            } else if ("gastosPorCategoria".equals(accion)) {
+                response.getWriter().print(gson.toJson(service.obtenerGastosPorCategoria(1)));
+            } else {
+                response.getWriter().print(gson.toJson(service.obtenerTodos(1)));
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().print("{\"error\":\"" + e.getMessage() + "\"}");
         }
-    } catch (Exception e) {
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        response.getWriter().print("{\"error\":\"" + e.getMessage() + "\"}");
     }
-}
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response)

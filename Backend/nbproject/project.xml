@@ -15,7 +15,15 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
+<<<<<<< HEAD
                     <file>${libs.OpenNLP.classpath}</file>
+=======
+                    <file>${file.reference.vosk-0.3.45.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jna-5.13.0.jar}</file>
+>>>>>>> 9119ede8e43f4da83b05599d25c702fded5cdd75
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

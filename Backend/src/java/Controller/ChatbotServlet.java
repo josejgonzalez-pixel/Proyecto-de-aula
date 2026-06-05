@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Model.ChatRequest;
 import Service.ChatbotService;
 import Util.ChatResponse;
 import com.google.gson.Gson;

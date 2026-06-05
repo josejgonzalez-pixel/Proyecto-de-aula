@@ -6,6 +6,7 @@ package DAO;
 
 import Util.Response;
 import Model.Usuario;
+import Util.Conexion;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -211,6 +212,34 @@ public class UsuarioDao extends BaseDao {
             return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
+    
+    public Usuario validarYObtenerUsuario(String correo, String contrasena) {
+    // IMPORTANTE: Asegúrate de que el nombre de la tabla sea "Usuario" (como en tus otros métodos) 
+    // y no "usuarios" si en tu base de datos la tabla está en singular.
+    String sql = "SELECT idUsuario, nombre, correo, contrasena FROM Usuario WHERE correo = ? AND contrasena = ?";
+    
+    try (Connection conn = Conexion.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setString(1, correo);
+        ps.setString(2, contrasena);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            // Pasamos los valores directamente al constructor de 4 parámetros
+            return new Usuario(
+                rs.getInt("idUsuario"),
+                rs.getString("nombre"),
+                rs.getString("correo"),
+                rs.getString("contrasena")
+            );
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
 
     // OBTENER TODOS
     public Response<Usuario> obtenerTodos() {

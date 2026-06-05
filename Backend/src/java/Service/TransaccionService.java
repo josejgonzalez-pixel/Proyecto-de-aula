@@ -7,6 +7,7 @@ package Service;
 import Util.Response;
 import DAO.TransaccionDao;
 import Model.Transaccion;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,14 +18,18 @@ public class TransaccionService {
 
     private TransaccionDao repo;
 
+    public List<Map<String, Object>> obtenerGastosPorCategoria(int idUsuario) throws Exception {
+        return repo.obtenerGastosPorCategoria(idUsuario);
+    }
+
     public Map<String, Double> obtenerResumen(int idUsuario) throws Exception {
         return repo.obtenerResumen(idUsuario);
     }
-
+    
     public TransaccionService() {
         repo = new TransaccionDao();
     }
-    
+
     // INSERTAR
     public Response<Transaccion> insertar(Transaccion t) throws Exception {
         return repo.insertar(t);

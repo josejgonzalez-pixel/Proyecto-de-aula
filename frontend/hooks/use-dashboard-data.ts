@@ -1,25 +1,29 @@
-// hooks/use-dashboard-data.ts
 import { useState, useEffect } from 'react';
 
-export function useDashboardData() {
-  const [data, setData] = useState({ ingresos: 0, gastos: 0, saldo: 0 });
-  const [loading, setLoading] = useState(true);
-  const URL = 'http://localhost:8080/FinanziApp/api/transacciones?accion=resumen';
+export const useDashboardData = () => {
+  const [data, setData] = useState({ summary: null, categories: [], transactions: [] });
 
   useEffect(() => {
-    console.log(data);
-    fetch(URL)
-      .then(res => res.json())
-      .then(json => {
-        console.log("Datos recibidos del servidor:", json);
-        setData(json);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error cargando dashboard:", err);
-        setLoading(false);
-      });
+    const fetchData = async () => {
+      try {
+        // Llama a los endpoints que configuraste en tu TransaccionServlet
+        const [sumRes, catRes, transRes] = await Promise.all([
+          fetch('http://localhost:8080/FinanziApp/api/transacciones?accion=resumen'),
+          fetch('http://localhost:8080/FinanziApp/api/transacciones?accion=gastosPorCategoria'),
+          fetch('http://localhost:8080/FinanziApp/api/transacciones') // Lista completa
+        ]);
+        
+        setData({
+          summary: await sumRes.json(),
+          categories: await catRes.json(),
+          transactions: await transRes.json()
+        });
+      } catch (error) {
+        console.error("Error al cargar datos:", error);
+      }
+    };
+    fetchData();
   }, []);
 
-  return { ...data, loading };
-}
+  return data;
+};

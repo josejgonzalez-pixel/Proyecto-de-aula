@@ -4,7 +4,6 @@
  */
 package DAO;
 
-
 import Util.Response;
 import Model.Categoria;
 import java.sql.Connection;
@@ -13,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  *
  * @author hp
@@ -91,32 +91,24 @@ public class CategoriaDao extends BaseDao {
 
     // ELIMINAR
     public Response<Categoria> eliminar(int id) {
+        // Imprimimos el ID que llega al DAO
+        System.out.println("DEBUG DAO: El ID recibido para eliminar es: " + id);
 
-        try {
+        String sql = "DELETE FROM `Categoria` WHERE `idCategoria` = ?";
 
-            Connection cn = getConnection();
-
-            String sql = "DELETE FROM Categoria WHERE idCategoria=?";
-
-            PreparedStatement ps = cn.prepareStatement(sql);
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
-
             int filas = ps.executeUpdate();
 
-            cn.close();
+            System.out.println("DEBUG DAO: Se afectaron " + filas + " filas.");
 
             if (filas > 0) {
-
-                return new Response<>(true,  "Categoria eliminada", null, null);
-
+                return new Response<>(true, "Categoría eliminada", null, null);
             } else {
-
-                return new Response<>(false, "No existe la categoria", null, null);
+                return new Response<>(false, "No se borró nada. ¿Existe el ID " + id + "?", null, null);
             }
-
         } catch (Exception e) {
-
             return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
     }
@@ -193,7 +185,7 @@ public class CategoriaDao extends BaseDao {
 
             cn.close();
 
-            return new Response<>(true,"Lista de categorias obtenida", null, lista);
+            return new Response<>(true, "Lista de categorias obtenida", null, lista);
 
         } catch (Exception e) {
 

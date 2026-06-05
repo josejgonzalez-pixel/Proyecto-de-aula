@@ -272,4 +272,8 @@ public class ChatbotService {
             return "Error: " + e.getMessage();
         }
     }
+
+    public String procesarAudio(byte[] audioBytes) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

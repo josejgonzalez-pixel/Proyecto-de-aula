@@ -1,7 +1,6 @@
 /**
  * @file components/layout/sidebar.tsx
  * @description Sidebar de navegación para vista desktop
- * Incluye el logo y los enlaces de navegación principales
  */
 
 'use client';
@@ -14,41 +13,25 @@ import {
   PieChart,
   Target,
   BarChart2,
-  GraduationCap,
   Settings,
+  Tag,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 import { Logo } from './header';
 
 /**
- * Mapeo de iconos para los elementos de navegación
- */
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  'layout-dashboard': LayoutDashboard,
-  'wallet': Wallet,
-  'pie-chart': PieChart,
-  'target-2': Target,
-  'bar-chart-2': BarChart2,
-  'graduation-cap': GraduationCap,
-  'settings': Settings,
-};
-
-/**
  * Elementos de navegación del sidebar
+ * He unificado la estructura para usar los componentes de íconos directamente
  */
 const sidebarItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard', href: '/' },
-  { id: 'cuentas', label: 'Cuentas', icon: 'wallet', href: '/cuentas' },
-  { id: 'presupuestos', label: 'Presupuestos', icon: 'pie-chart', href: '/presupuestos' },
-  { id: 'metas', label: 'Metas', icon: 'target-2', href: '/metas' },
-  { id: 'informes', label: 'Informes', icon: 'bar-chart-2', href: '/informes' },
-  { id: 'educacion', label: 'Educación Financiera', icon: 'graduation-cap', href: '/educacion' },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/' },
+  //{ id: 'cuentas', label: 'Cuentas', icon: Wallet, href: '/cuentas' },
+  { id: 'presupuestos', label: 'Presupuestos', icon: PieChart, href: '/presupuestos' },
+  { id: 'metas', label: 'Metas', icon: Target, href: '/metas' },
+  { id: 'informes', label: 'Informes', icon: BarChart2, href: '/informes' },
+  { id: 'categorias', label: 'Categorías', icon: Tag, href: '/categorias' },
 ];
 
-/**
- * Componente Sidebar
- * Muestra la navegación principal en desktop con estado activo
- */
 export function Sidebar() {
   const pathname = usePathname();
   
@@ -56,51 +39,51 @@ export function Sidebar() {
     <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:bg-card h-screen">
 
       {/* Logo */}
-      <div className="flex h-16 items-center border-b px-6 shink-0">
+      <div className="flex h-16 items-center border-b px-6 shrink-0">
         <Logo />
       </div>
       
       <div className="grid grid-rows-[1fr_auto] flex-1 min-h-0">
 
-      {/* Navegación */}
-      <nav className="space-y-1 p-4 overflow-y-auto">
-        {sidebarItems.map((item) => {
-          const Icon = iconMap[item.icon];
-          const isActive = pathname === item.href;
-          
-          return (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-              )}
-            >
-              {Icon && <Icon className="h-5 w-5" />}
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
-      
-      {/* Configuración al final */}
-      <div className="border-t p-4 bg-card shrink-0">
-        <Link
-          href="/configuracion"
-          className={cn(
-            'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-            pathname === '/configuracion'
-              ? 'bg-primary/10 text-primary'
-              : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-          )}
-        >
-          <Settings className="h-5 w-5" />
-          Configuración
-        </Link>
-      </div>
+        {/* Navegación Principal */}
+        <nav className="space-y-1 p-4 overflow-y-auto">
+          {sidebarItems.map((item) => {
+            const Icon = item.icon; // Usamos el componente directamente
+            const isActive = pathname === item.href;
+            
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                )}
+              >
+                <Icon className="h-5 w-5" />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+        
+        {/* Configuración al final */}
+        <div className="border-t p-4 bg-card shrink-0">
+          <Link
+            href="/configuracion"
+            className={cn(
+              'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+              pathname === '/configuracion'
+                ? 'bg-primary/10 text-primary'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+            )}
+          >
+            <Settings className="h-5 w-5" />
+            Configuración
+          </Link>
+        </div>
 
       </div>
     </aside>
