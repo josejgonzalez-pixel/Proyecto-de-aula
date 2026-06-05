@@ -52,4 +52,23 @@ public class CategoriaService {
         return respuesta.isEstado()
         && respuesta.getEntidad() != null;
     }
+    
+    public Integer obtenerIdPorNombre(String nombreCategoria) {
+
+    Response<Categoria> respuesta = repo.obtenerTodos();
+
+    if (respuesta.getLista() != null) {
+
+        for (Categoria categoria : respuesta.getLista()) {
+
+            if (categoria.getNombreCategoria()
+                    .equalsIgnoreCase(nombreCategoria)) {
+
+                return categoria.getIdCategoria();
+            }
+        }
+    }
+
+    return null;
+}
 }
