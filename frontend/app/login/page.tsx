@@ -21,12 +21,14 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { setUserId } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +52,8 @@ export default function LoginPage() {
 
       const data = await response.json();
       if (data.estado) {
-      document.cookie = `auth_token=true; path=/; max-age=86400; SameSite=Lax`; // Guarda el token en una cookie por 1 hora
+      console.log('Login exitoso, ID recibido:', data.idUsuario);
+      setUserId(data.idUsuario); // Guardamos el ID en el contexto global
 
       console.log('Login exitoso, redirigiendo al dashboard...');
       router.push('/dashboard');

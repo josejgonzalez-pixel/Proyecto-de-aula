@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author Camil
  */
 public class Presupuesto {
-    
+
     private int idPresupuesto;
     private String nombre;
     private double montoInicial;
@@ -78,6 +78,7 @@ public class Presupuesto {
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
+
     
     public boolean verificarLimite() {
         return montoActual <= 0;

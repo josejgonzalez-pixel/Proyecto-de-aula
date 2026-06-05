@@ -23,30 +23,27 @@ import java.util.Map;
  */
 public class TransaccionDao extends BaseDao {
 
-    public Map<String, Double> obtenerResumen(int idUsuario) throws Exception {
-        Map<String, Double> datos = new HashMap<>();
-        String sql = "SELECT "
-                + "SUM(CASE WHEN c.tipo = 'Ingreso' THEN t.monto ELSE 0 END) as totalIngresos, "
-                + "SUM(CASE WHEN c.tipo = 'Gasto' THEN t.monto ELSE 0 END) as totalGastos "
-                + "FROM Transaccion t "
-                + "JOIN Categoria c ON t.idCategoria = c.idCategoria "
-                + "WHERE t.idUsuario = ?";
+    public List<Map<String, Object>> obtenerGastosPorCategoria(int idUsuario) throws Exception {
+    List<Map<String, Object>> lista = new ArrayList<>();
+    String sql = "SELECT c.nombreCategoria, SUM(t.monto) as total " +
+                 "FROM Transaccion t " +
+                 "JOIN Categoria c ON t.idCategoria = c.idCategoria " +
+                 "WHERE t.idUsuario = ? AND c.tipo = 'Gasto' " +
+                 "GROUP BY c.nombreCategoria";
 
-        // Aquí usas tu método getConnection() existente
-        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setInt(1, idUsuario);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    double ingresos = rs.getDouble("totalIngresos");
-                    double gastos = rs.getDouble("totalGastos");
-                    datos.put("ingresos", ingresos);
-                    datos.put("gastos", gastos);
-                    datos.put("saldo", ingresos - gastos);
-                }
+    try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+        ps.setInt(1, idUsuario);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Map<String, Object> fila = new HashMap<>();
+                fila.put("nombre", rs.getString("nombreCategoria"));
+                fila.put("total", rs.getDouble("total"));
+                lista.add(fila);
             }
         }
-        return datos;
     }
+    return lista;
+}
 
     // INSERTAR TRANSACCION
     public Response<Transaccion> insertar(Transaccion t) throws Exception {
@@ -225,5 +222,29 @@ public class TransaccionDao extends BaseDao {
             return new Response<>(false, "Error: " + e.getMessage(), null, null);
         }
         return new Response<>(true, "Lista obtenida", null, lista);
+    }
+    
+    public Map<String, Double> obtenerResumen(int idUsuario) throws Exception {
+        Map<String, Double> datos = new HashMap<>();
+        String sql = "SELECT "
+                + "SUM(CASE WHEN c.tipo = 'Ingreso' THEN t.monto ELSE 0 END) as totalIngresos, "
+                + "SUM(CASE WHEN c.tipo = 'Gasto' THEN t.monto ELSE 0 END) as totalGastos "
+                + "FROM Transaccion t "
+                + "JOIN Categoria c ON t.idCategoria = c.idCategoria "
+                + "WHERE t.idUsuario = ?";
+
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    double ingresos = rs.getDouble("totalIngresos");
+                    double gastos = rs.getDouble("totalGastos");
+                    datos.put("ingresos", ingresos);
+                    datos.put("gastos", gastos);
+                    datos.put("saldo", ingresos - gastos);
+                }
+            }
+        }
+        return datos;
     }
 }

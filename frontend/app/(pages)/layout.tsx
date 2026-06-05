@@ -1,16 +1,8 @@
-/**
- * @file app/(pages)/layout.tsx
- * @description Layout compartido para las páginas secundarias
- * Incluye el sidebar, header y navegación inferior
- */
+import { Header } from '../../components/layout/header';
+import { Sidebar } from '../../components/layout/sidebar';
+import { BottomNav } from '../../components/layout/bottom-nav';
 
-import { Header, Sidebar, BottomNav } from '@/components/layout';
-
-export default function PagesLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function PagesLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       <Sidebar />
