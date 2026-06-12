@@ -1,0 +1,250 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package DAO;
+
+import Util.Response;
+import Model.Transaccion;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ *
+ * @author hp
+ */
+public class TransaccionDao extends BaseDao {
+
+    public List<Map<String, Object>> obtenerGastosPorCategoria(int idUsuario) throws Exception {
+    List<Map<String, Object>> lista = new ArrayList<>();
+    String sql = "SELECT c.nombreCategoria, SUM(t.monto) as total " +
+                 "FROM Transaccion t " +
+                 "JOIN Categoria c ON t.idCategoria = c.idCategoria " +
+                 "WHERE t.idUsuario = ? AND c.tipo = 'Gasto' " +
+                 "GROUP BY c.nombreCategoria";
+
+    try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+        ps.setInt(1, idUsuario);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Map<String, Object> fila = new HashMap<>();
+                fila.put("nombre", rs.getString("nombreCategoria"));
+                fila.put("total", rs.getDouble("total"));
+                lista.add(fila);
+            }
+        }
+    }
+    return lista;
+}
+
+    // INSERTAR TRANSACCION
+    public Response<Transaccion> insertar(Transaccion t) throws Exception {
+
+        try {
+
+            String sql = "INSERT INTO Transaccion "
+                    + "(monto, fecha, descripcion, idUsuario, idCategoria) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+
+            try (Connection cn = getConnection()) {
+
+                PreparedStatement ps = cn.prepareStatement(
+                        sql,
+                        Statement.RETURN_GENERATED_KEYS
+                );
+
+                ps.setDouble(1, t.getMonto());
+                ps.setDate(2, Date.valueOf(t.getFecha()));
+                ps.setString(3, t.getDescripcion());
+                ps.setInt(4, t.getIdUsuario());
+                ps.setInt(5, t.getIdCategoria());
+
+                ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+
+                if (rs.next()) {
+                    t.setIdTransaccion(rs.getInt(1));
+                }
+            }
+
+            return new Response<>(true, "Transacción insertada correctamente", t, null);
+
+        } catch (SQLException e) {
+
+            return new Response<>(false, "Error al insertar transacción: " + e.getMessage(), null, null);
+        }
+    }
+
+    // ACTUALIZAR TRANSACCION
+    public Response<Transaccion> actualizar(Transaccion t) throws Exception {
+
+        try {
+
+            String sql = "UPDATE Transaccion SET "
+                    + "monto=?, "
+                    + "fecha=?, "
+                    + "descripcion=?, "
+                    + "idUsuario=?, "
+                    + "idCategoria=? "
+                    + "WHERE idTransaccion=?";
+
+            int filas;
+            try (Connection cn = getConnection()) {
+                PreparedStatement ps = cn.prepareStatement(sql);
+                ps.setDouble(1, t.getMonto());
+                ps.setDate(2, Date.valueOf(t.getFecha()));
+                ps.setString(3, t.getDescripcion());
+                ps.setInt(4, t.getIdUsuario());
+                ps.setInt(5, t.getIdCategoria());
+                ps.setInt(6, t.getIdTransaccion());
+                filas = ps.executeUpdate();
+            }
+
+            if (filas > 0) {
+
+                return new Response<>(true, "Transacción actualizada correctamente", t, null);
+
+            } else {
+
+                return new Response<>(false, "Transaccion no encontrada", null, null);
+            }
+
+        } catch (SQLException e) {
+
+            return new Response<>(false, "Error al actualizar transaccion: " + e.getMessage(), null, null);
+        }
+    }
+
+    // ELIMINAR TRANSACCION
+    public Response<Transaccion> eliminar(int id) throws Exception {
+
+        try {
+
+            String sql = "DELETE FROM Transaccion WHERE idTransaccion=?";
+
+            int filas;
+            try (Connection cn = getConnection()) {
+                PreparedStatement ps = cn.prepareStatement(sql);
+                ps.setInt(1, id);
+                filas = ps.executeUpdate();
+            }
+
+            if (filas > 0) {
+
+                return new Response<>(true, "Transaccion eliminada correctamente", null, null);
+
+            } else {
+
+                return new Response<>(false, "Transaccion no encontrada", null, null);
+            }
+
+        } catch (SQLException e) {
+
+            return new Response<>(false, "Error al eliminar transaccion: " + e.getMessage(), null, null);
+        }
+    }
+
+    // OBTENER TRANSACCION POR ID
+    public Response<Transaccion> obtenerPorId(int id) throws Exception {
+
+        try {
+
+            String sql = "SELECT * FROM Transaccion WHERE idTransaccion=?";
+
+            Transaccion t = null;
+
+            try (Connection cn = getConnection()) {
+
+                PreparedStatement ps = cn.prepareStatement(sql);
+
+                ps.setInt(1, id);
+
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+
+                    t = new Transaccion(
+                            rs.getInt("idTransaccion"),
+                            rs.getDouble("monto"),
+                            rs.getDate("fecha").toLocalDate(),
+                            rs.getString("descripcion"),
+                            rs.getInt("idUsuario"),
+                            rs.getInt("idCategoria")
+                    ) {
+                    };
+                }
+            }
+
+            if (t != null) {
+
+                return new Response<>(true, "Transaccion encontrada", t, null);
+
+            } else {
+
+                return new Response<>(false, "Transaccion no existe", null, null);
+            }
+
+        } catch (SQLException e) {
+
+            return new Response<>(false, "Error: " + e.getMessage(), null, null);
+        }
+    }
+
+    // OBTENER TODAS LAS TRANSACCIONES
+    public Response<Transaccion> obtenerTodosPorUsuario(int idUsuario) throws Exception {
+        String sql = "SELECT * FROM Transaccion WHERE idUsuario = ?";
+        List<Transaccion> lista = new ArrayList<>();
+
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new Transaccion(
+                            rs.getInt("idTransaccion"),
+                            rs.getDouble("monto"),
+                            rs.getDate("fecha").toLocalDate(),
+                            rs.getString("descripcion"),
+                            rs.getInt("idUsuario"),
+                            rs.getInt("idCategoria")
+                    ) {});
+                }
+            }
+        } catch (SQLException e) {
+            return new Response<>(false, "Error: " + e.getMessage(), null, null);
+        }
+        return new Response<>(true, "Lista obtenida", null, lista);
+    }
+    
+    public Map<String, Double> obtenerResumen(int idUsuario) throws Exception {
+        Map<String, Double> datos = new HashMap<>();
+        String sql = "SELECT "
+                + "SUM(CASE WHEN c.tipo = 'Ingreso' THEN t.monto ELSE 0 END) as totalIngresos, "
+                + "SUM(CASE WHEN c.tipo = 'Gasto' THEN t.monto ELSE 0 END) as totalGastos "
+                + "FROM Transaccion t "
+                + "JOIN Categoria c ON t.idCategoria = c.idCategoria "
+                + "WHERE t.idUsuario = ?";
+
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    double ingresos = rs.getDouble("totalIngresos");
+                    double gastos = rs.getDouble("totalGastos");
+                    datos.put("ingresos", ingresos);
+                    datos.put("gastos", gastos);
+                    datos.put("saldo", ingresos - gastos);
+                }
+            }
+        }
+        return datos;
+    }
+}
